@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — IESIS Services Portal</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: transparent;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .card-wrapper {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card-heading {
+      text-align: center;
+    }
+
+    .card-heading h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1a3a5c;
+      margin-bottom: 4px;
+    }
+
+    .card-heading p {
+      font-size: 13px;
+      color: #5f6368;
+    }
+
+    .login-card {
+      background: #ffffff;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .login-card-header {
+      background: #f8f9fa;
+      border-bottom: 1px solid #e8eaed;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lock-icon { width: 14px; height: 14px; color: #4285f4; flex-shrink: 0; }
+
+    .card-header-text { font-size: 12px; color: #5f6368; }
+    .card-header-text span { font-weight: 500; color: #4285f4; }
+
+    .authpro-frame {
+      width: 100%;
+      height: 320px;
+      border: none;
+      display: block;
+    }
+
+    .notice {
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: #fff;
+    }
+
+    .notice-icon { flex-shrink: 0; margin-top: 1px; color: #4285f4; }
+
+    .notice-text { font-size: 12px; color: #5f6368; line-height: 1.6; }
+
+    @media (max-width: 460px) {
+      body { padding: 16px; align-items: flex-start; padding-top: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card-wrapper">
+
+    <div class="card-heading">
+      <h1>Sign in to continue</h1>
+      <p>Enter your credentials to access the portal</p>
+    </div>
+
+    <div class="login-card">
+      <div class="login-card-header">
+        <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        <span class="card-header-text">
+          Secure login powered by <span>AuthPro</span>
+        </span>
+      </div>
+      <iframe
+        class="authpro-frame"
+        src="https://www.authpro.com/auth/DICTAuthPro/"
+        title="Staff login form"
+        scrolling="no"
+        frameborder="0">
+      </iframe>
+    </div>
+
+    <div class="notice">
+      <svg class="notice-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span class="notice-text">
+        This portal is restricted to authorized staff only.
+        Contact the office if you need access.
+      </span>
+    </div>
+
+  </div>
+</body>
+</html>
