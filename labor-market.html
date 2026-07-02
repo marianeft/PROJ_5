@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://www.authpro.com/auth/DICTAuthPro/?action=pp"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labor Market Information — IESIS Portal</title>
+  <style>
+    :root {
+      --font-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --primary: #1a7a3c;
+      --primary-light: #e8f5ee;
+      --primary-mid: #c3e6d0;
+      --sidebar-bg: #f0f7f3;
+      --sidebar-hover-bg: #e0f0e8;
+      --topbar-bg: #1a3a6b;
+      --text-main: #1f2937;
+      --text-muted: #5b6577;
+      --border-soft: #c8e6d4;
+      --topbar-height: 52px;
+      --sidebar-width: 270px;
+      --sidebar-collapsed-width: 76px;
+      --radius: 6px;
+      --gap-base: 20px;
+      --transition: 0.2s ease;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-base); color: var(--text-main); background: #fff; }
+
+    /* ── Topbar ── */
+    .topbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: var(--topbar-height);
+      background: var(--topbar-bg);
+      display: flex; align-items: center; padding: 0 20px; gap: 14px;
+      z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .topbar-logo { width: 34px; height: 34px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
+    .topbar-name { display: flex; flex-direction: column; line-height: 1.2; }
+    .topbar-name strong { font-size: 14px; font-weight: 700; color: #fff; }
+    .topbar-name span { font-size: 10px; color: rgba(255,255,255,0.6); }
+    .topbar-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+    .topbar-nav { display: flex; align-items: center; gap: 4px; flex: 1; }
+    .topbar-link {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: var(--radius);
+      color: rgba(255,255,255,0.8); text-decoration: none;
+      font-size: 13px; font-weight: 500;
+      border: none; background: none; font-family: inherit; cursor: pointer;
+      transition: background var(--transition);
+    }
+    .topbar-link:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .topbar-link.active { background: rgba(255,255,255,0.15); color: #fff; }
+    .topbar-link svg { width: 15px; height: 15px; }
+    .topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+    .topbar-help { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius); color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer; border: none; background: none; font-family: inherit; transition: background var(--transition); }
+    .topbar-help:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .topbar-help svg { width: 15px; height: 15px; }
+    .topbar-user { display: flex; align-items: center; gap: 8px; padding: 4px 10px 4px 6px; border-radius: 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); }
+    .user-avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .user-name { font-size: 12px; color: #fff; font-weight: 500; }
+    .btn-signout {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: var(--radius);
+      background: rgba(220,53,69,0.15); border: 1px solid rgba(220,53,69,0.3);
+      color: #ff8a8a; font-size: 12px; font-weight: 600;
+      cursor: pointer; font-family: inherit; text-decoration: none;
+      transition: background var(--transition);
+    }
+    .btn-signout:hover { background: rgba(220,53,69,0.3); color: #ffb3b3; }
+    .btn-signout svg { width: 14px; height: 14px; }
+
+    /* ── App shell ── */
+    .app-shell { padding-top: var(--topbar-height); display: flex; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-width); flex-shrink: 0;
+      background: var(--sidebar-bg); border-right: 1px solid var(--border-soft);
+      position: sticky; top: var(--topbar-height);
+      height: calc(100vh - var(--topbar-height));
+      overflow-y: auto; display: flex; flex-direction: column;
+      z-index: 15; transition: width 0.25s ease;
+    }
+    .sidebar.collapsed { width: var(--sidebar-collapsed-width); }
+    .sidebar-brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 16px; border-bottom: 1px solid var(--border-soft);
+    }
+    .sidebar.collapsed .sidebar-brand { flex-direction: column; gap: 8px; padding: 12px 8px; }
+    .brand-logo {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; flex-shrink: 0;
+    }
+    .brand-title { margin: 0; font-size: 14px; font-weight: 600; color: var(--text-main); }
+    .sidebar.collapsed .brand-title { display: none; }
+    .collapse-toggle {
+      margin-left: auto; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; gap: 3px;
+      width: 28px; height: 28px; border: 1px solid var(--border-soft);
+      border-radius: var(--radius); background: #fff; cursor: pointer; padding: 0;
+    }
+    .collapse-toggle:hover { background: var(--sidebar-hover-bg); }
+    .collapse-toggle span { display: block; width: 12px; height: 2px; background: var(--text-main); border-radius: 2px; }
+    .sidebar.collapsed .collapse-toggle { margin-left: 0; }
+
+    .sidebar-nav { flex: 1; padding: 10px 8px; }
+    .sidebar-nav ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1px; }
+    .nav-section-label {
+      font-size: 10px; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.7px;
+      padding: 12px 8px 4px; white-space: nowrap;
+    }
+    .sidebar.collapsed .nav-section-label { display: none; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px; width: 100%;
+      padding: 9px 10px; border: none; border-radius: var(--radius);
+      background: none; color: var(--text-muted); font-family: inherit;
+      font-size: 13px; text-align: left; cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+    }
+    .nav-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .nav-link:hover { background: var(--sidebar-hover-bg); color: var(--text-main); }
+    .nav-link.active { background: var(--primary); color: #fff; font-weight: 600; }
+    .nav-label { white-space: nowrap; }
+    .sidebar.collapsed .nav-link { justify-content: center; padding: 10px 0; }
+    .sidebar.collapsed .nav-label { display: none; }
+
+    .sidebar-footer { padding: 14px; border-top: 1px solid var(--border-soft); display: flex; flex-direction: column; gap: 10px; }
+    .sidebar.collapsed .sidebar-footer { padding: 10px 8px; }
+    .btn-secondary {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 10px 14px; border-radius: var(--radius);
+      border: 1.5px solid var(--primary); background: transparent;
+      color: var(--primary); font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: background var(--transition), color var(--transition);
+      font-family: inherit; cursor: pointer;
+    }
+    .btn-secondary:hover { background: var(--primary); color: #fff; }
+    .btn-secondary svg { width: 15px; height: 15px; }
+    .sidebar.collapsed .btn-secondary { padding: 10px 0; }
+    .sidebar.collapsed .btn-label { display: none; }
+    .btn-signout-sidebar {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 10px 14px; border-radius: var(--radius);
+      border: 1.5px solid #f87171; background: transparent;
+      color: #ef4444; font-size: 13px; font-weight: 600;
+      text-decoration: none; transition: background var(--transition), color var(--transition);
+      font-family: inherit; cursor: pointer;
+    }
+    .btn-signout-sidebar:hover { background: #fef2f2; }
+    .btn-signout-sidebar svg { width: 15px; height: 15px; }
+    .sidebar.collapsed .btn-signout-sidebar { padding: 10px 0; }
+    .sidebar.collapsed .signout-label { display: none; }
+    .need-help {
+      background: var(--primary-light); border: 1px solid var(--primary-mid);
+      border-radius: 8px; padding: 12px; display: flex; gap: 10px; align-items: flex-start;
+    }
+    .sidebar.collapsed .need-help { padding: 8px; justify-content: center; }
+    .need-help svg { width: 20px; height: 20px; color: var(--primary); flex-shrink: 0; }
+    .need-help-text { font-size: 12px; }
+    .need-help-text strong { display: block; color: var(--text-main); margin-bottom: 2px; }
+    .need-help-text span { color: var(--text-muted); }
+    .sidebar.collapsed .need-help-text { display: none; }
+
+    .mobile-toggle {
+      display: none; position: fixed; top: calc(var(--topbar-height) + 10px); left: 12px;
+      z-index: 30; width: 36px; height: 36px;
+      flex-direction: column; justify-content: center; align-items: center; gap: 4px;
+      border: 1px solid var(--border-soft); border-radius: var(--radius);
+      background: #fff; cursor: pointer; padding: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .mobile-toggle span { display: block; width: 16px; height: 2px; background: var(--text-main); border-radius: 2px; }
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.4); z-index: 14; }
+
+    /* ── Main content ── */
+    .main-content { flex: 1; padding: 28px 32px; min-width: 0; }
+    .content-page { display: none; }
+    .content-page.active { display: block; }
+    .content-page:focus { outline: none; }
+
+    .page-title { font-size: 26px; font-weight: 700; color: var(--text-main); margin: 0 0 4px; }
+    .page-subtitle { font-size: 13px; color: var(--text-muted); margin: 0 0 24px; line-height: 1.6; max-width: 680px; }
+
+    .section-title { font-size: 14px; font-weight: 600; color: var(--text-main); margin: 0 0 14px; }
+
+    /* ── Data source cards ── */
+    .source-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 32px; }
+    .source-card {
+      border: 1px solid #e5e7eb; border-radius: 10px; padding: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: box-shadow var(--transition), border-color var(--transition);
+    }
+    .source-card:hover { box-shadow: 0 4px 16px rgba(26,122,60,0.1); border-color: var(--primary); }
+    .source-card-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .source-card-icon svg { width: 24px; height: 24px; }
+    .source-card-title { font-size: 14px; font-weight: 700; color: var(--text-main); }
+    .source-card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; flex: 1; }
+    .source-card-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 5px; border: none;
+      font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer;
+      transition: opacity var(--transition); text-decoration: none; width: fit-content;
+    }
+    .source-card-btn:hover { opacity: 0.85; }
+    .source-card-btn svg { width: 12px; height: 12px; }
+
+    /* ── Key indicators ── */
+    .indicators-row { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; margin-bottom: 28px; }
+    .indicator-card {
+      background: var(--sidebar-bg); border: 1px solid var(--border-soft);
+      border-radius: 8px; padding: 14px 12px;
+    }
+    .indicator-label { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; line-height: 1.3; }
+    .indicator-value { font-size: 22px; font-weight: 700; color: var(--primary); line-height: 1; }
+    .indicator-value.red { color: #ea4335; }
+    .indicator-period { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    .indicator-change { font-size: 11px; margin-top: 3px; font-weight: 500; }
+    .indicator-change.up { color: #1a7a3c; }
+    .indicator-change.down { color: #ea4335; }
+
+    /* ── Overview grid ── */
+    .overview-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+
+    /* ── Pie chart ── */
+    .chart-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; }
+    .chart-card-title { font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 12px; }
+    .chart-card-sub { font-size: 10px; color: var(--text-muted); margin-bottom: 10px; }
+    .pie-legend { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+    .pie-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); }
+    .pie-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── Line chart ── */
+    .line-chart-wrap { overflow-x: auto; }
+
+    /* ── Occupations list ── */
+    .occ-list { display: flex; flex-direction: column; gap: 8px; }
+    .occ-item { display: flex; align-items: center; gap: 8px; }
+    .occ-rank { width: 18px; height: 18px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .occ-name { font-size: 12px; color: var(--text-main); flex: 1; }
+    .occ-count { font-size: 12px; font-weight: 600; color: var(--primary); }
+    .view-more { font-size: 12px; color: var(--primary); cursor: pointer; margin-top: 8px; display: flex; align-items: center; gap: 4px; text-decoration: none; }
+
+    /* ── Regional list ── */
+    .region-list { display: flex; flex-direction: column; gap: 6px; }
+    .region-item { display: flex; align-items: center; gap: 6px; }
+    .region-name { font-size: 11px; color: var(--text-muted); width: 80px; flex-shrink: 0; }
+    .region-bar-wrap { flex: 1; height: 8px; background: #f1f3f4; border-radius: 4px; overflow: hidden; }
+    .region-bar { height: 100%; border-radius: 4px; background: var(--primary); }
+    .region-val { font-size: 11px; font-weight: 600; color: var(--text-main); width: 38px; text-align: right; }
+
+    /* ── Generate data form ── */
+    .generate-section { background: var(--primary-light); border: 1px solid var(--primary-mid); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+    .generate-title { font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+    .generate-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6; }
+    .generate-form { display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-size: 11px; font-weight: 600; color: var(--text-muted); }
+    .form-select {
+      height: 34px; border: 1px solid var(--border-soft); border-radius: 5px;
+      padding: 0 10px; font-size: 12px; color: var(--text-main);
+      background: #fff; font-family: inherit; min-width: 160px;
+    }
+    .btn-generate {
+      height: 34px; padding: 0 16px; border-radius: 5px; border: none;
+      background: var(--primary); color: #fff; font-size: 12px; font-weight: 600;
+      font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 6px;
+      white-space: nowrap;
+    }
+    .btn-generate:hover { background: #155e30; }
+    .btn-generate svg { width: 13px; height: 13px; }
+
+    /* ── Data footer ── */
+    .data-footer {
+      font-size: 11px; color: var(--text-muted);
+      padding: 12px 0; border-top: 1px solid #f1f3f4;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .data-footer svg { width: 13px; height: 13px; color: var(--primary); flex-shrink: 0; }
+
+    .content-placeholder { border: 1.5px dashed var(--border-soft); border-radius: 8px; padding: 48px 20px; text-align: center; color: var(--text-muted); font-size: 14px; }
+
+    @media (max-width: 1100px) { .indicators-row { grid-template-columns: repeat(3,1fr); } .overview-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 880px) {
+      .collapse-toggle { display: none; }
+      .mobile-toggle { display: flex; }
+      .sidebar { position: fixed; top: var(--topbar-height); left: -100%; width: min(var(--sidebar-width),80vw); height: calc(100vh - var(--topbar-height)); transition: left 0.3s ease; }
+      .sidebar.open { left: 0; }
+      .sidebar-overlay.open { display: block; }
+      .main-content { padding: 20px 16px 20px 56px; }
+      .source-cards { grid-template-columns: 1fr; }
+      .indicators-row { grid-template-columns: repeat(2,1fr); }
+      .overview-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body>
+
+<!-- SVG Sprite -->
+<svg style="display:none" aria-hidden="true">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></symbol>
+    <symbol id="i-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
+    <symbol id="i-pie" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="19" cy="7" r="3"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></symbol>
+    <symbol id="i-headset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></symbol>
+  </defs>
+</svg>
+
+<!-- ── Topbar ── -->
+<header class="topbar">
+  <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="topbar-brand" target="_blank" rel="noopener">
+    <div class="topbar-logo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="7" height="7" rx="1" fill="#1a3a6b"/>
+        <rect x="14" y="3" width="7" height="7" rx="1" fill="#4285f4"/>
+        <rect x="3" y="14" width="7" height="7" rx="1" fill="#4285f4"/>
+        <rect x="14" y="14" width="7" height="7" rx="1" fill="#1a3a6b"/>
+      </svg>
+    </div>
+    <div class="topbar-name">
+      <strong>IESIS</strong>
+      <span>Integrated Employment and Skills Information System</span>
+    </div>
+  </a>
+  <div class="topbar-sep"></div>
+  <nav class="topbar-nav">
+    <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="topbar-link" target="_blank" rel="noopener">
+      <svg aria-hidden="true"><use href="#i-home"/></svg> Home
+    </a>
+    <button type="button" class="topbar-link active">
+      <svg aria-hidden="true"><use href="#i-dashboard"/></svg> Executive Dashboard
+    </button>
+  </nav>
+  <div class="topbar-right">
+    <button type="button" class="topbar-help"><svg aria-hidden="true"><use href="#i-help"/></svg> Help</button>
+    <div class="topbar-user">
+      <div class="user-avatar">JD</div>
+      <span class="user-name">Juan Dela Cruz</span>
+    </div>
+    <a href="https://www.authpro.com/auth/DICTAuthPro/?action=logout" class="btn-signout">
+      <svg aria-hidden="true"><use href="#i-logout"/></svg> Sign out
+    </a>
+  </div>
+</header>
+
+<button class="mobile-toggle" id="mobileToggle" aria-label="Open navigation">
+  <span></span><span></span><span></span>
+</button>
+
+<div class="app-shell">
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">LMI</div>
+      <h2 class="brand-title">Labor Market Information</h2>
+      <button class="collapse-toggle" id="collapseToggle" aria-label="Collapse sidebar">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <button type="button" class="nav-link active" data-target="page-overview" title="Overview">
+            <svg aria-hidden="true"><use href="#i-home"/></svg><span class="nav-label">Overview</span>
+          </button>
+        </li>
+
+        <li><div class="nav-section-label">Data Sources</div></li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-lfs" title="PSA's LFS">
+            <svg aria-hidden="true"><use href="#i-pie"/></svg><span class="nav-label">PSA's LFS (Labor Force Survey)</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-psa" title="Other PSA Labor Statistics">
+            <svg aria-hidden="true"><use href="#i-db"/></svg><span class="nav-label">Other PSA Labor Statistics</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-peis" title="PEIS Generated Data">
+            <svg aria-hidden="true"><use href="#i-chart"/></svg><span class="nav-label">PEIS Generated Data</span>
+          </button>
+        </li>
+
+        <li><div class="nav-section-label">Labor Market Analysis</div></li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-employment" title="Employment Situation">
+            <svg aria-hidden="true"><use href="#i-people"/></svg><span class="nav-label">Employment Situation</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-industry" title="Industry Trends">
+            <svg aria-hidden="true"><use href="#i-trend"/></svg><span class="nav-label">Industry Trends</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-occupation" title="Occupation Outlook">
+            <svg aria-hidden="true"><use href="#i-briefcase"/></svg><span class="nav-label">Occupation Outlook</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-regional" title="Regional Comparison">
+            <svg aria-hidden="true"><use href="#i-map"/></svg><span class="nav-label">Regional Comparison</span>
+          </button>
+        </li>
+
+        <li><div class="nav-section-label">Tools</div></li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-explorer" title="Data Explorer">
+            <svg aria-hidden="true"><use href="#i-search"/></svg><span class="nav-label">Data Explorer</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-reports" title="Reports">
+            <svg aria-hidden="true"><use href="#i-file"/></svg><span class="nav-label">Reports</span>
+          </button>
+        </li>
+        <li>
+          <button type="button" class="nav-link" data-target="page-downloads" title="Downloads">
+            <svg aria-hidden="true"><use href="#i-download"/></svg><span class="nav-label">Downloads</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="need-help">
+        <svg aria-hidden="true"><use href="#i-headset"/></svg>
+        <div class="need-help-text">
+          <strong>Need Help?</strong>
+          <span>Visit our Help Center or contact support.</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <main class="main-content">
+
+    <!-- ── Overview ── -->
+    <section class="content-page active" id="page-overview" tabindex="-1">
+      <h1 class="page-title">Labor Market Information</h1>
+      <p class="page-subtitle">Access official labor statistics from PSA and generate insights through the Philippine Employment Information System (PEIS).</p>
+
+      <!-- Data Sources -->
+      <p class="section-title">Explore Data Sources</p>
+      <div class="source-cards">
+        <div class="source-card">
+          <div class="source-card-icon" style="background:#ede7f6;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <div class="source-card-title">PSA's LFS<br>(Labor Force Survey)</div>
+          <div class="source-card-desc">Explore quarterly data on employment, unemployment, and labor force participation from PSA's LFS.</div>
+          <button type="button" class="source-card-btn" style="background:#7c3aed;color:#fff;" data-target="page-lfs">
+            View LFS Data <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+        <div class="source-card">
+          <div class="source-card-icon" style="background:#e8f5ee;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#1a7a3c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
+          </div>
+          <div class="source-card-title">Other PSA Labor Statistics</div>
+          <div class="source-card-desc">Access other labor and employment statistics from PSA, including establishments and wages.</div>
+          <button type="button" class="source-card-btn" style="background:#1a7a3c;color:#fff;" data-target="page-psa">
+            View PSA Data <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+        <div class="source-card">
+          <div class="source-card-icon" style="background:#e8f0fe;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4285f4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div class="source-card-title">PEIS Generated Data</div>
+          <div class="source-card-desc">Generate customized data and analytics based on integrated data from various employment programs and services.</div>
+          <button type="button" class="source-card-btn" style="background:#4285f4;color:#fff;" data-target="page-peis">
+            Generate PEIS Data <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Key Indicators -->
+      <p class="section-title">Key Labor Market Indicators <span style="font-weight:400;color:var(--text-muted);font-size:12px;">(Latest Available)</span></p>
+      <div class="indicators-row">
+        <div class="indicator-card">
+          <div class="indicator-label">Labor Force Participation Rate</div>
+          <div class="indicator-value">64.0%</div>
+          <div class="indicator-period">April 2024</div>
+          <div class="indicator-change up">▲ 1.3 pp vs. April 2023</div>
+        </div>
+        <div class="indicator-card">
+          <div class="indicator-label">Employment Rate</div>
+          <div class="indicator-value">96.2%</div>
+          <div class="indicator-period">April 2024</div>
+          <div class="indicator-change up">▲ 0.8 pp vs. April 2023</div>
+        </div>
+        <div class="indicator-card">
+          <div class="indicator-label">Unemployment Rate</div>
+          <div class="indicator-value red">3.8%</div>
+          <div class="indicator-period">April 2024</div>
+          <div class="indicator-change down">▼ 0.5 pp vs. April 2023</div>
+        </div>
+        <div class="indicator-card">
+          <div class="indicator-label">Underemployment Rate</div>
+          <div class="indicator-value red">11.7%</div>
+          <div class="indicator-period">April 2024</div>
+          <div class="indicator-change down">▼ 0.6 pp vs. April 2023</div>
+        </div>
+        <div class="indicator-card">
+          <div class="indicator-label">Total Employed Persons</div>
+          <div class="indicator-value" style="font-size:18px;">48.31M</div>
+          <div class="indicator-period">April 2024</div>
+          <div class="indicator-change up">▲ 1.29M vs. April 2023</div>
+        </div>
+      </div>
+
+      <!-- Labor Market Overview Charts -->
+      <p class="section-title">Labor Market Overview</p>
+      <div class="overview-grid">
+
+        <!-- Pie chart -->
+        <div class="chart-card">
+          <div class="chart-card-title">Employment by Major Industry Group</div>
+          <div class="chart-card-sub">(% Share)</div>
+          <svg viewBox="0 0 120 120" width="120" height="120" style="display:block;margin:0 auto;">
+            <!-- Services 61.2% -->
+            <path d="M60,60 L60,10 A50,50 0 1,1 31.8,96.2 Z" fill="#4285f4"/>
+            <!-- Agriculture 19.6% -->
+            <path d="M60,60 L31.8,96.2 A50,50 0 0,1 14.6,33.8 Z" fill="#34a853"/>
+            <!-- Industry 15.6% -->
+            <path d="M60,60 L14.6,33.8 A50,50 0 0,1 46.4,11.4 Z" fill="#fbbc04"/>
+            <!-- Other 3.6% -->
+            <path d="M60,60 L46.4,11.4 A50,50 0 0,1 60,10 Z" fill="#ea4335"/>
+            <circle cx="60" cy="60" r="30" fill="white"/>
+            <text x="60" y="56" text-anchor="middle" font-size="9" font-weight="700" fill="#1f2937">48.31M</text>
+            <text x="60" y="67" text-anchor="middle" font-size="7" fill="#5b6577">Total Employed</text>
+            <text x="60" y="76" text-anchor="middle" font-size="7" fill="#5b6577">(April 2024)</text>
+          </svg>
+          <div class="pie-legend">
+            <div class="pie-legend-item"><div class="pie-dot" style="background:#4285f4;"></div>Services — 61.2%</div>
+            <div class="pie-legend-item"><div class="pie-dot" style="background:#34a853;"></div>Agriculture — 19.6%</div>
+            <div class="pie-legend-item"><div class="pie-dot" style="background:#fbbc04;"></div>Industry — 15.6%</div>
+            <div class="pie-legend-item"><div class="pie-dot" style="background:#ea4335;"></div>Other — 3.6%</div>
+          </div>
+        </div>
+
+        <!-- Line chart -->
+        <div class="chart-card">
+          <div class="chart-card-title">Unemployment Rate Trend (%)</div>
+          <div style="margin-top:8px;">
+            <svg viewBox="0 0 220 100" width="100%" height="100">
+              <line x1="30" y1="5" x2="30" y2="80" stroke="#e5e7eb" stroke-width="1"/>
+              <line x1="30" y1="80" x2="215" y2="80" stroke="#e5e7eb" stroke-width="1"/>
+              <!-- Grid lines -->
+              <line x1="30" y1="30" x2="215" y2="30" stroke="#f1f3f4" stroke-width="1" stroke-dasharray="4"/>
+              <line x1="30" y1="55" x2="215" y2="55" stroke="#f1f3f4" stroke-width="1" stroke-dasharray="4"/>
+              <!-- Y labels -->
+              <text x="26" y="84" text-anchor="end" font-size="7" fill="#9ca3af">0%</text>
+              <text x="26" y="58" text-anchor="end" font-size="7" fill="#9ca3af">2%</text>
+              <text x="26" y="33" text-anchor="end" font-size="7" fill="#9ca3af">4%</text>
+              <text x="26" y="8" text-anchor="end" font-size="7" fill="#9ca3af">6%</text>
+              <!-- Data points: Apr23=4.4, Jul23=4.0, Oct23=3.7, Jan24=3.6, Apr24=3.8 -->
+              <!-- Scale: 0-6%, 80px height = 6%, so 1%=13.3px -->
+              <!-- y = 80 - (val/6)*75 -->
+              <polyline points="50,21.7 95,30 130,33.8 165,35 200,32.5" fill="none" stroke="#1a7a3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="50" cy="21.7" r="3" fill="#1a7a3c"/>
+              <circle cx="95" cy="30" r="3" fill="#1a7a3c"/>
+              <circle cx="130" cy="33.8" r="3" fill="#1a7a3c"/>
+              <circle cx="165" cy="35" r="3" fill="#1a7a3c"/>
+              <circle cx="200" cy="32.5" r="3" fill="#1a7a3c"/>
+              <!-- Value labels -->
+              <text x="50" y="17" text-anchor="middle" font-size="7" font-weight="700" fill="#1a7a3c">4.4%</text>
+              <text x="95" y="26" text-anchor="middle" font-size="7" font-weight="700" fill="#1a7a3c">4.0%</text>
+              <text x="130" y="30" text-anchor="middle" font-size="7" font-weight="700" fill="#1a7a3c">3.7%</text>
+              <text x="165" y="31" text-anchor="middle" font-size="7" font-weight="700" fill="#1a7a3c">3.6%</text>
+              <text x="200" y="28" text-anchor="middle" font-size="7" font-weight="700" fill="#1a7a3c">3.8%</text>
+              <!-- X labels -->
+              <text x="50" y="90" text-anchor="middle" font-size="7" fill="#9ca3af">Apr 2023</text>
+              <text x="95" y="90" text-anchor="middle" font-size="7" fill="#9ca3af">Jul 2023</text>
+              <text x="130" y="90" text-anchor="middle" font-size="7" fill="#9ca3af">Oct 2023</text>
+              <text x="165" y="90" text-anchor="middle" font-size="7" fill="#9ca3af">Jan 2024</text>
+              <text x="200" y="90" text-anchor="middle" font-size="7" fill="#9ca3af">Apr 2024</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Top Occupations -->
+        <div class="chart-card">
+          <div class="chart-card-title">Top 5 Occupations in Demand</div>
+          <div class="chart-card-sub">From Job Order Data via PEIS</div>
+          <div class="occ-list">
+            <div class="occ-item"><div class="occ-rank">1</div><div class="occ-name">Sales Workers</div><div class="occ-count">18,245</div></div>
+            <div class="occ-item"><div class="occ-rank">2</div><div class="occ-name">Service Workers</div><div class="occ-count">14,872</div></div>
+            <div class="occ-item"><div class="occ-rank">3</div><div class="occ-name">Professionals</div><div class="occ-count">12,396</div></div>
+            <div class="occ-item"><div class="occ-rank">4</div><div class="occ-name">Technicians & Assoc. Professionals</div><div class="occ-count">9,563</div></div>
+            <div class="occ-item"><div class="occ-rank">5</div><div class="occ-name">Clerical Support Workers</div><div class="occ-count">8,214</div></div>
+          </div>
+          <a href="#" class="view-more">View more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+
+        <!-- Regional Employment -->
+        <div class="chart-card">
+          <div class="chart-card-title">Regional Employment Snapshot</div>
+          <div class="chart-card-sub">Employment Rate (%)</div>
+          <div class="region-list">
+            <div class="region-item"><div class="region-name">NCR</div><div class="region-bar-wrap"><div class="region-bar" style="width:96.8%"></div></div><div class="region-val">96.8%</div></div>
+            <div class="region-item"><div class="region-name">Region IV-A</div><div class="region-bar-wrap"><div class="region-bar" style="width:96.1%"></div></div><div class="region-val">96.1%</div></div>
+            <div class="region-item"><div class="region-name">Region II</div><div class="region-bar-wrap"><div class="region-bar" style="width:95.6%"></div></div><div class="region-val">95.6%</div></div>
+            <div class="region-item"><div class="region-name">Region VI</div><div class="region-bar-wrap"><div class="region-bar" style="width:95.2%"></div></div><div class="region-val">95.2%</div></div>
+            <div class="region-item"><div class="region-name">Region V</div><div class="region-bar-wrap"><div class="region-bar" style="width:94.7%"></div></div><div class="region-val">94.7%</div></div>
+          </div>
+          <a href="#" class="view-more" style="margin-top:10px;">View all regions <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Generate Data -->
+      <div class="generate-section">
+        <div class="generate-title">Generate Data & Reports through PEIS</div>
+        <div class="generate-desc">Create customized tables, charts, and reports using integrated data from employment services, job orders, placements, and beneficiaries.</div>
+        <div class="generate-form">
+          <div class="form-group">
+            <label>Select Data Type</label>
+            <select class="form-select">
+              <option>Job Orders</option>
+              <option>Placements</option>
+              <option>Jobseekers</option>
+              <option>Beneficiaries</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Select Time Period</label>
+            <select class="form-select">
+              <option>Jan 2023 – Apr 2024</option>
+              <option>Jan 2022 – Dec 2022</option>
+              <option>Jan 2021 – Dec 2021</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Select Region (Optional)</label>
+            <select class="form-select">
+              <option>All Regions</option>
+              <option>NCR</option>
+              <option>Region VI</option>
+              <option>Region VII</option>
+            </select>
+          </div>
+          <button type="button" class="btn-generate">
+            Generate Data <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="data-footer">
+        <svg aria-hidden="true"><use href="#i-info"/></svg>
+        Data is updated regularly. Source: PSA, PEIS | Last updated: May 31, 2024 08:30 AM
+      </div>
+    </section>
+
+    <!-- ── Placeholder pages ── -->
+    <section class="content-page" id="page-lfs" tabindex="-1">
+      <h1 class="page-title">PSA's LFS (Labor Force Survey)</h1>
+      <p class="page-subtitle">Explore quarterly data on employment, unemployment, and labor force participation from PSA's LFS.</p>
+      <div class="content-placeholder">LFS data viewer goes here.</div>
+    </section>
+    <section class="content-page" id="page-psa" tabindex="-1">
+      <h1 class="page-title">Other PSA Labor Statistics</h1>
+      <p class="page-subtitle">Access other labor and employment statistics from PSA, including establishments and wages.</p>
+      <div class="content-placeholder">PSA statistics viewer goes here.</div>
+    </section>
+    <section class="content-page" id="page-peis" tabindex="-1">
+      <h1 class="page-title">PEIS Generated Data</h1>
+      <p class="page-subtitle">Generate customized data and analytics from PEIS.</p>
+      <div class="content-placeholder">PEIS data generator goes here.</div>
+    </section>
+    <section class="content-page" id="page-employment" tabindex="-1">
+      <h1 class="page-title">Employment Situation</h1>
+      <p class="page-subtitle">Current employment situation analysis.</p>
+      <div class="content-placeholder">Employment situation analysis goes here.</div>
+    </section>
+    <section class="content-page" id="page-industry" tabindex="-1">
+      <h1 class="page-title">Industry Trends</h1>
+      <p class="page-subtitle">Industry-level labor market trends and analysis.</p>
+      <div class="content-placeholder">Industry trends analysis goes here.</div>
+    </section>
+    <section class="content-page" id="page-occupation" tabindex="-1">
+      <h1 class="page-title">Occupation Outlook</h1>
+      <p class="page-subtitle">Occupation demand forecasts and skills gap analysis.</p>
+      <div class="content-placeholder">Occupation outlook tools go here.</div>
+    </section>
+    <section class="content-page" id="page-regional" tabindex="-1">
+      <h1 class="page-title">Regional Comparison</h1>
+      <p class="page-subtitle">Compare labor market indicators across regions.</p>
+      <div class="content-placeholder">Regional comparison tools go here.</div>
+    </section>
+    <section class="content-page" id="page-explorer" tabindex="-1">
+      <h1 class="page-title">Data Explorer</h1>
+      <p class="page-subtitle">Explore and filter labor market datasets.</p>
+      <div class="content-placeholder">Data explorer tool goes here.</div>
+    </section>
+    <section class="content-page" id="page-reports" tabindex="-1">
+      <h1 class="page-title">Reports</h1>
+      <p class="page-subtitle">Generate and download labor market reports.</p>
+      <div class="content-placeholder">Report generator goes here.</div>
+    </section>
+    <section class="content-page" id="page-downloads" tabindex="-1">
+      <h1 class="page-title">Downloads</h1>
+      <p class="page-subtitle">Download datasets and reports.</p>
+      <div class="content-placeholder">Download center goes here.</div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const MOBILE_BP = 880;
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const mobileToggle = document.getElementById('mobileToggle');
+  const collapseToggle = document.getElementById('collapseToggle');
+  const navButtons = document.querySelectorAll('.nav-link[data-target], .source-card-btn[data-target]');
+  const pages = document.querySelectorAll('.content-page');
+
+  const openMobile = () => { sidebar.classList.add('open'); overlay.classList.add('open'); };
+  const closeMobile = () => { sidebar.classList.remove('open'); overlay.classList.remove('open'); };
+
+  function toggleCollapse() {
+    const c = sidebar.classList.toggle('collapsed');
+    collapseToggle.setAttribute('aria-label', c ? 'Expand sidebar' : 'Collapse sidebar');
+  }
+
+  function showPage(id) {
+    pages.forEach(p => p.classList.toggle('active', p.id === id));
+    document.querySelectorAll('.nav-link[data-target]').forEach(b => {
+      const a = b.dataset.target === id;
+      b.classList.toggle('active', a);
+      a ? b.setAttribute('aria-current','page') : b.removeAttribute('aria-current');
+    });
+    document.getElementById(id)?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  mobileToggle.addEventListener('click', () => sidebar.classList.contains('open') ? closeMobile() : openMobile());
+  collapseToggle.addEventListener('click', toggleCollapse);
+  overlay.addEventListener('click', closeMobile);
+  navButtons.forEach(b => b.addEventListener('click', () => {
+    showPage(b.dataset.target);
+    if (window.innerWidth <= MOBILE_BP) closeMobile();
+  }));
+  window.addEventListener('resize', () => { if (window.innerWidth > MOBILE_BP) closeMobile(); else sidebar.classList.remove('collapsed'); });
+</script>
+</body>
+</html>
