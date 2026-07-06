@@ -225,17 +225,13 @@
     .sidebar.collapsed .sidebar-brand { flex-direction: column; gap: 8px; padding: 12px 8px; }
 
     .brand-logo {
-      width: 36px; height: 36px;
+      width: 40px; height: 40px;
       border-radius: 8px;
-      background-color: var(--primary);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-      flex-shrink: 0;
+      background: transparent;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; overflow: hidden;
     }
+    .brand-logo img { width: 100%; height: 100%; object-fit: contain; }
 
     .brand-title { margin: 0; font-size: 15px; font-weight: 600; color: var(--text-main); white-space: nowrap; }
     .sidebar.collapsed .brand-title { display: none; }
@@ -387,13 +383,16 @@
     .quick-card:hover { box-shadow: 0 4px 16px rgba(66,133,244,0.1); border-color: var(--primary); }
 
     .quick-card-icon {
-      width: 44px; height: 44px;
+      width: 90px; height: 90px;
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      overflow: hidden;
+      background: transparent !important;
     }
+    .quick-card-icon img { width: 100%; height: 100%; object-fit: contain; }
     .quick-card-icon svg { width: 22px; height: 22px; }
 
     .quick-card-title { font-size: 14px; font-weight: 600; color: var(--text-main); margin: 0; }
@@ -554,9 +553,12 @@
         <svg aria-hidden="true"><use href="#icon-help"></use></svg> Help
       </button>
       <div class="topbar-user">
-        <div class="user-avatar">JD</div>
-        <span class="user-name">Juan Dela Cruz</span>
+        <div class="user-avatar" id="userAvatar">--</div>
+        <span class="user-name" id="userName">Loading...</span>
       </div>
+      <a href="https://www.authpro.com/auth/DICTAuthPro/?action=logout" class="btn-signout">
+        <svg aria-hidden="true"><use href="#icon-logout"></use></svg> Sign out
+      </a>
     </div>
   </header>
 
@@ -568,7 +570,9 @@
   <div class="app-shell">
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
-        <div class="brand-logo" aria-hidden="true">PESO</div>
+        <div class="brand-logo">
+          <img src="https://marianeft.github.io/PROJ_5/images/peso-icon.png" alt="PESO Services">
+        </div>
         <h2 class="brand-title">PESO Services</h2>
         <button class="collapse-toggle" id="collapseToggle" aria-label="Collapse sidebar" aria-expanded="true">
           <span></span><span></span><span></span>
@@ -649,8 +653,8 @@
         <p class="quick-access-label">Quick Access</p>
         <div class="quick-cards">
           <div class="quick-card">
-            <div class="quick-card-icon" style="background:#e8f0fe;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#4285f4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+            <div class="quick-card-icon">
+              <img src="https://marianeft.github.io/PROJ_5/images/peso-icon.png" alt="PESO Directory">
             </div>
             <p class="quick-card-title">PESO Directory</p>
             <p class="quick-card-desc">View the list of all registered PESO offices nationwide.</p>
@@ -661,8 +665,8 @@
           </div>
 
           <div class="quick-card">
-            <div class="quick-card-icon" style="background:#e6f4ea;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#34a853" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1"/><line x1="9" y1="7" x2="9" y2="7.01"/><line x1="15" y1="7" x2="15" y2="7.01"/><line x1="9" y1="11" x2="9" y2="11.01"/><line x1="15" y1="11" x2="15" y2="11.01"/></svg>
+            <div class="quick-card-icon">
+              <img src="https://marianeft.github.io/PROJ_5/images/peso-icon.png" alt="PESOMP-WV Directory">
             </div>
             <p class="quick-card-title">PESOMP-WV, Inc. Directory</p>
             <p class="quick-card-desc">View the list of all PESO Managers and Workers' Inc. nationwide.</p>
@@ -673,8 +677,8 @@
           </div>
 
           <div class="quick-card">
-            <div class="quick-card-icon" style="background:#fce8e6;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#ea4335" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            <div class="quick-card-icon">
+              <img src="https://marianeft.github.io/PROJ_5/images/peso-icon.png" alt="Executive Dashboard">
             </div>
             <p class="quick-card-title">Executive Dashboard</p>
             <p class="quick-card-desc">Generate and view summary data and analytics for decision-making.</p>
@@ -828,6 +832,51 @@
       else sidebar.classList.remove('collapsed');
     });
   </script>
+
+<script>
+  /* ── Dynamic AuthPro username ── */
+  (function () {
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '=([^;]*)'));
+      return match ? decodeURIComponent(match[1]) : null;
+    }
+
+    function getAuthProUser() {
+      const candidates = [
+        'DICTAuthPro_username', 'DICTAuthPro_user', 'DICTAuthPro',
+        'authpro_username', 'authpro_user', 'ap_user', 'ap_username'
+      ];
+      for (const name of candidates) {
+        const val = getCookie(name);
+        if (val && val.trim()) return val.trim();
+      }
+      const all = document.cookie.split(';').map(c => c.trim());
+      for (const c of all) {
+        if (/authpro|dictauth/i.test(c)) {
+          const val = c.split('=')[1];
+          if (val && val.trim() && val.length < 60) return decodeURIComponent(val.trim());
+        }
+      }
+      return null;
+    }
+
+    const username = getAuthProUser();
+    const avatarEl = document.getElementById('userAvatar');
+    const nameEl   = document.getElementById('userName');
+
+    if (username && avatarEl && nameEl) {
+      nameEl.textContent = username;
+      const parts = username.split(/[\s._@-]+/).filter(Boolean);
+      const initials = parts.length >= 2
+        ? (parts[0][0] + parts[1][0]).toUpperCase()
+        : username.substring(0, 2).toUpperCase();
+      avatarEl.textContent = initials;
+    } else if (nameEl) {
+      nameEl.textContent = 'Staff';
+      if (avatarEl) avatarEl.textContent = 'ST';
+    }
+  })();
+</script>
 
 </body>
 </html>

@@ -90,11 +90,12 @@
     }
     .sidebar.collapsed .sidebar-brand { flex-direction: column; gap: 8px; padding: 12px 8px; }
     .brand-logo {
-      width: 36px; height: 36px; border-radius: 8px;
-      background: var(--primary); color: #fff;
+      width: 40px; height: 40px; border-radius: 8px;
+      background: transparent;
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 700; flex-shrink: 0;
+      flex-shrink: 0; overflow: hidden;
     }
+    .brand-logo img { width: 100%; height: 100%; object-fit: contain; }
     .brand-title { margin: 0; font-size: 14px; font-weight: 600; color: var(--text-main); }
     .sidebar.collapsed .brand-title { display: none; }
     .collapse-toggle {
@@ -195,7 +196,8 @@
       transition: box-shadow var(--transition), border-color var(--transition);
     }
     .source-card:hover { box-shadow: 0 4px 16px rgba(26,122,60,0.1); border-color: var(--primary); }
-    .source-card-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .source-card-icon { width: 90px; height: 90px; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: transparent !important; }
+    .source-card-icon img { width: 100%; height: 100%; object-fit: contain; }
     .source-card-icon svg { width: 24px; height: 24px; }
     .source-card-title { font-size: 14px; font-weight: 700; color: var(--text-main); }
     .source-card-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; flex: 1; }
@@ -351,8 +353,8 @@
   <div class="topbar-right">
     <button type="button" class="topbar-help"><svg aria-hidden="true"><use href="#i-help"/></svg> Help</button>
     <div class="topbar-user">
-      <div class="user-avatar">JD</div>
-      <span class="user-name">Juan Dela Cruz</span>
+      <div class="user-avatar" id="userAvatar">--</div>
+      <span class="user-name" id="userName">Loading...</span>
     </div>
     <a href="https://www.authpro.com/auth/DICTAuthPro/?action=logout" class="btn-signout">
       <svg aria-hidden="true"><use href="#i-logout"/></svg> Sign out
@@ -368,7 +370,9 @@
   <!-- ── Sidebar ── -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div class="brand-logo">LMI</div>
+      <div class="brand-logo">
+        <img src="https://marianeft.github.io/PROJ_5/images/lmi-con.png" alt="Labor Market Information">
+      </div>
       <h2 class="brand-title">Labor Market Information</h2>
       <button class="collapse-toggle" id="collapseToggle" aria-label="Collapse sidebar">
         <span></span><span></span><span></span>
@@ -442,6 +446,11 @@
     </nav>
 
     <div class="sidebar-footer">
+      <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="btn-secondary" target="_blank" rel="noopener" title="Back to Main Portal">
+        <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span class="btn-label">Back to Main Portal</span>
+      </a>
+
       <div class="need-help">
         <svg aria-hidden="true"><use href="#i-headset"/></svg>
         <div class="need-help-text">
@@ -465,8 +474,8 @@
       <p class="section-title">Explore Data Sources</p>
       <div class="source-cards">
         <div class="source-card">
-          <div class="source-card-icon" style="background:#ede7f6;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          <div class="source-card-icon">
+            <img src="https://marianeft.github.io/PROJ_5/images/lmi-con.png" alt="PSA LFS">
           </div>
           <div class="source-card-title">PSA's LFS<br>(Labor Force Survey)</div>
           <div class="source-card-desc">Explore quarterly data on employment, unemployment, and labor force participation from PSA's LFS.</div>
@@ -475,8 +484,8 @@
           </button>
         </div>
         <div class="source-card">
-          <div class="source-card-icon" style="background:#e8f5ee;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#1a7a3c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
+          <div class="source-card-icon">
+            <img src="https://marianeft.github.io/PROJ_5/images/lmi-con.png" alt="PSA Labor Statistics">
           </div>
           <div class="source-card-title">Other PSA Labor Statistics</div>
           <div class="source-card-desc">Access other labor and employment statistics from PSA, including establishments and wages.</div>
@@ -485,8 +494,8 @@
           </button>
         </div>
         <div class="source-card">
-          <div class="source-card-icon" style="background:#e8f0fe;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#4285f4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <div class="source-card-icon">
+            <img src="https://marianeft.github.io/PROJ_5/images/lmi-con.png" alt="PEIS Generated Data">
           </div>
           <div class="source-card-title">PEIS Generated Data</div>
           <div class="source-card-desc">Generate customized data and analytics based on integrated data from various employment programs and services.</div>
@@ -764,6 +773,54 @@
     if (window.innerWidth <= MOBILE_BP) closeMobile();
   }));
   window.addEventListener('resize', () => { if (window.innerWidth > MOBILE_BP) closeMobile(); else sidebar.classList.remove('collapsed'); });
+</script>
+
+<script>
+  /* ── Dynamic AuthPro username ── */
+  (function () {
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '=([^;]*)'));
+      return match ? decodeURIComponent(match[1]) : null;
+    }
+
+    function getAuthProUser() {
+      /* AuthPro sets cookies using the account name as prefix */
+      const candidates = [
+        'DICTAuthPro_username', 'DICTAuthPro_user', 'DICTAuthPro',
+        'authpro_username', 'authpro_user', 'ap_user', 'ap_username'
+      ];
+      for (const name of candidates) {
+        const val = getCookie(name);
+        if (val && val.trim()) return val.trim();
+      }
+      /* Fallback: scan all cookies for anything that looks like a username */
+      const all = document.cookie.split(';').map(c => c.trim());
+      for (const c of all) {
+        if (/authpro|dictauth/i.test(c)) {
+          const val = c.split('=')[1];
+          if (val && val.trim() && val.length < 60) return decodeURIComponent(val.trim());
+        }
+      }
+      return null;
+    }
+
+    const username = getAuthProUser();
+    const avatarEl = document.getElementById('userAvatar');
+    const nameEl   = document.getElementById('userName');
+
+    if (username && avatarEl && nameEl) {
+      nameEl.textContent = username;
+      /* Build 2-letter initials from the username */
+      const parts = username.split(/[\s._@-]+/).filter(Boolean);
+      const initials = parts.length >= 2
+        ? (parts[0][0] + parts[1][0]).toUpperCase()
+        : username.substring(0, 2).toUpperCase();
+      avatarEl.textContent = initials;
+    } else if (nameEl) {
+      nameEl.textContent = 'Staff';
+      if (avatarEl) avatarEl.textContent = 'ST';
+    }
+  })();
 </script>
 </body>
 </html>
