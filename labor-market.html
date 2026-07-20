@@ -13,11 +13,11 @@
       --primary-mid: #c3e6d0;
       --sidebar-bg: #f0f7f3;
       --sidebar-hover-bg: #e0f0e8;
-      --topbar-bg: #1a3a6b;
+      --topbar-bg: #1f2b6f;
       --text-main: #1f2937;
       --text-muted: #5b6577;
       --border-soft: #c8e6d4;
-      --topbar-height: 52px;
+      --topbar-height: 70px;
       --sidebar-width: 270px;
       --sidebar-collapsed-width: 76px;
       --radius: 6px;
@@ -32,43 +32,45 @@
       position: fixed; top: 0; left: 0; right: 0;
       height: var(--topbar-height);
       background: var(--topbar-bg);
-      display: flex; align-items: center; padding: 0 20px; gap: 14px;
-      z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
+      z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    .topbar-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-    .topbar-logo { width: 34px; height: 34px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
-    .topbar-name { display: flex; flex-direction: column; line-height: 1.2; }
-    .topbar-name strong { font-size: 14px; font-weight: 700; color: #fff; }
-    .topbar-name span { font-size: 10px; color: rgba(255,255,255,0.6); }
-    .topbar-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
-    .topbar-nav { display: flex; align-items: center; gap: 4px; flex: 1; }
+    .topbar-brand { display: flex; align-items: center; gap: 16px; text-decoration: none; flex-shrink: 0; }
+    .topbar-logo { width: 50px; height: 50px; border-radius: 8px; background: transparent; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .topbar-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .topbar-name { display: flex; flex-direction: column; line-height: 1.3; }
+    .topbar-name strong { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
+    .topbar-name span { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 400; }
+    .topbar-sep { display: none; }
+    .topbar-nav { display: flex; align-items: center; gap: 2px; flex: 1; justify-content: center; }
     .topbar-link {
       display: flex; align-items: center; gap: 6px;
-      padding: 6px 12px; border-radius: var(--radius);
+      padding: 8px 16px; border-radius: var(--radius);
       color: rgba(255,255,255,0.8); text-decoration: none;
-      font-size: 13px; font-weight: 500;
+      font-size: 14px; font-weight: 500; white-space: nowrap;
       border: none; background: none; font-family: inherit; cursor: pointer;
-      transition: background var(--transition);
+      transition: background var(--transition), color var(--transition);
     }
-    .topbar-link:hover { background: rgba(255,255,255,0.12); color: #fff; }
-    .topbar-link.active { background: rgba(255,255,255,0.15); color: #fff; }
-    .topbar-link svg { width: 15px; height: 15px; }
-    .topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-    .topbar-help { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius); color: rgba(255,255,255,0.7); font-size: 13px; cursor: pointer; border: none; background: none; font-family: inherit; transition: background var(--transition); }
-    .topbar-help:hover { background: rgba(255,255,255,0.1); color: #fff; }
-    .topbar-help svg { width: 15px; height: 15px; }
-    .topbar-user { display: flex; align-items: center; gap: 8px; padding: 4px 10px 4px 6px; border-radius: 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); }
-    .user-avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
-    .user-name { font-size: 12px; color: #fff; font-weight: 500; }
+    .topbar-link:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .topbar-link.active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 600; }
+    .topbar-link svg { width: 16px; height: 16px; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; margin-left: 0; }
+    .topbar-help { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius); color: rgba(255,255,255,0.8); font-size: 13px; cursor: pointer; border: none; background: none; font-family: inherit; transition: background var(--transition), color var(--transition); }
+    .topbar-help:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .topbar-help svg { width: 16px; height: 16px; }
+    .topbar-user { display: flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; border-radius: 100px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: background var(--transition); }
+    .topbar-user:hover { background: rgba(255,255,255,0.18); }
+    .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.3); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .user-name { font-size: 13px; color: #fff; font-weight: 500; white-space: nowrap; }
     .btn-signout {
       display: flex; align-items: center; gap: 6px;
-      padding: 6px 12px; border-radius: var(--radius);
-      background: rgba(220,53,69,0.15); border: 1px solid rgba(220,53,69,0.3);
-      color: #ff8a8a; font-size: 12px; font-weight: 600;
+      padding: 8px 20px; border-radius: 100px;
+      background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; font-size: 13px; font-weight: 600;
       cursor: pointer; font-family: inherit; text-decoration: none;
-      transition: background var(--transition);
+      transition: background var(--transition), color var(--transition);
     }
-    .btn-signout:hover { background: rgba(220,53,69,0.3); color: #ffb3b3; }
+    .btn-signout:hover { background: rgba(255,255,255,0.3); color: #fff; }
     .btn-signout svg { width: 14px; height: 14px; }
 
     /* ── App shell ── */
@@ -346,7 +348,7 @@
     <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="topbar-link" target="_blank" rel="noopener">
       <svg aria-hidden="true"><use href="#i-home"/></svg> Home
     </a>
-    <button type="button" class="topbar-link active">
+    <button type="button" class="topbar-link active" data-target="page-overview">
       <svg aria-hidden="true"><use href="#i-dashboard"/></svg> Executive Dashboard
     </button>
   </nav>
@@ -475,7 +477,7 @@
       <div class="source-cards">
         <div class="source-card">
           <div class="source-card-icon">
-            <img src="https://marianeft.github.io/PROJ_5/images/lmi-con.png" alt="PSA LFS">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:60px;height:60px;"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
           </div>
           <div class="source-card-title">PSA's LFS<br>(Labor Force Survey)</div>
           <div class="source-card-desc">Explore quarterly data on employment, unemployment, and labor force participation from PSA's LFS.</div>
@@ -485,7 +487,7 @@
         </div>
         <div class="source-card">
           <div class="source-card-icon">
-            <img src="https://marianeft.github.io/PROJ_5/images/lmi-con.png" alt="PSA Labor Statistics">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#1a7a3c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:60px;height:60px;"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
           </div>
           <div class="source-card-title">Other PSA Labor Statistics</div>
           <div class="source-card-desc">Access other labor and employment statistics from PSA, including establishments and wages.</div>
@@ -495,7 +497,7 @@
         </div>
         <div class="source-card">
           <div class="source-card-icon">
-            <img src="https://marianeft.github.io/PROJ_5/images/lmi-con.png" alt="PEIS Generated Data">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4285f4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:60px;height:60px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           </div>
           <div class="source-card-title">PEIS Generated Data</div>
           <div class="source-card-desc">Generate customized data and analytics based on integrated data from various employment programs and services.</div>
@@ -506,7 +508,7 @@
       </div>
 
       <!-- Key Indicators -->
-      <p class="section-title">Key Labor Market Indicators <span style="font-weight:400;color:var(--text-muted);font-size:12px;">(Latest Available)</span></p>
+      <p class="section-title">Key Labor Market Indicators <span style="font-weight:400;color:var(--text-muted);font-size:12px;">(Latest Available — Source: PSA, April 2024)</span></p>
       <div class="indicators-row">
         <div class="indicator-card">
           <div class="indicator-label">Labor Force Participation Rate</div>
@@ -772,6 +774,14 @@
     showPage(b.dataset.target);
     if (window.innerWidth <= MOBILE_BP) closeMobile();
   }));
+  const topbarDashboard = document.querySelector('.topbar-link[data-target]');
+  if (topbarDashboard) {
+    topbarDashboard.addEventListener('click', (e) => {
+      e.preventDefault();
+      showPage(topbarDashboard.dataset.target);
+      if (window.innerWidth <= MOBILE_BP) closeMobile();
+    });
+  }
   window.addEventListener('resize', () => { if (window.innerWidth > MOBILE_BP) closeMobile(); else sidebar.classList.remove('collapsed'); });
 </script>
 

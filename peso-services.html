@@ -16,8 +16,8 @@
       --text-main: #1f2937;
       --text-muted: #5b6577;
       --border-soft: #d7e6fb;
-      --topbar-bg: #1a3a6b;
-      --topbar-height: 52px;
+      --topbar-bg: #1f2b6f;
+      --topbar-height: 70px;
       --radius: 6px;
       --gap-base: 20px;
       --transition: 0.2s ease;
@@ -43,151 +43,157 @@
       background: var(--topbar-bg);
       display: flex;
       align-items: center;
-      padding: 0 20px;
-      gap: 14px;
+      justify-content: space-between;
+      padding: 0 32px;
       z-index: 50;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
     .topbar-brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 16px;
       text-decoration: none;
       flex-shrink: 0;
     }
 
     .topbar-logo {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: #fff;
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      overflow: hidden;
     }
 
     .topbar-logo img {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      object-fit: cover;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .topbar-name {
       display: flex;
       flex-direction: column;
-      line-height: 1.2;
+      line-height: 1.3;
     }
 
     .topbar-name strong {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       color: #fff;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
     }
 
     .topbar-name span {
-      font-size: 10px;
-      color: rgba(255,255,255,0.6);
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
       font-weight: 400;
     }
 
     .topbar-sep {
-      width: 1px;
-      height: 28px;
-      background: rgba(255,255,255,0.2);
-      flex-shrink: 0;
+      display: none;
     }
 
     .topbar-nav {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 2px;
       flex: 1;
+      justify-content: center;
     }
 
     .topbar-link {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 12px;
-      border-radius: var(--radius);
+      padding: 8px 16px;
+      border-radius: 6px;
       color: rgba(255,255,255,0.8);
       text-decoration: none;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 500;
       transition: background var(--transition), color var(--transition);
       cursor: pointer;
       border: none;
       background: none;
       font-family: inherit;
+      white-space: nowrap;
     }
 
-    .topbar-link:hover { background: rgba(255,255,255,0.12); color: #fff; }
-    .topbar-link.active { background: rgba(255,255,255,0.15); color: #fff; }
-    .topbar-link svg { width: 15px; height: 15px; }
+    .topbar-link:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .topbar-link.active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 600; }
+    .topbar-link svg { width: 16px; height: 16px; }
 
     .topbar-right {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-left: auto;
+      gap: 12px;
+      margin-left: 0;
     }
 
     .topbar-help {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 12px;
-      border-radius: var(--radius);
-      color: rgba(255,255,255,0.7);
+      padding: 8px 14px;
+      border-radius: 6px;
+      color: rgba(255,255,255,0.8);
       font-size: 13px;
       cursor: pointer;
       border: none;
       background: none;
       font-family: inherit;
-      transition: background var(--transition);
+      transition: background var(--transition), color var(--transition);
     }
-    .topbar-help:hover { background: rgba(255,255,255,0.1); color: #fff; }
-    .topbar-help svg { width: 15px; height: 15px; }
+    .topbar-help:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .topbar-help svg { width: 16px; height: 16px; }
+    
     .btn-signout {
       display: flex; align-items: center; gap: 6px;
-      padding: 6px 12px; border-radius: var(--radius);
-      background: rgba(220,53,69,0.15); border: 1px solid rgba(220,53,69,0.3);
-      color: #ff8a8a; font-size: 12px; font-weight: 600;
+      padding: 8px 20px; border-radius: 100px;
+      background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; font-size: 13px; font-weight: 600;
       cursor: pointer; font-family: inherit; text-decoration: none;
-      transition: background var(--transition);
+      transition: background var(--transition), color var(--transition);
     }
-    .btn-signout:hover { background: rgba(220,53,69,0.3); color: #ffb3b3; }
+    .btn-signout:hover { background: rgba(255,255,255,0.3); color: #fff; }
     .btn-signout svg { width: 14px; height: 14px; }
 
     .topbar-user {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 4px 10px 4px 6px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.1);
+      gap: 10px;
+      padding: 6px 12px 6px 6px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.12);
       cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: background var(--transition);
+    }
+    
+    .topbar-user:hover {
+      background: rgba(255,255,255,0.18);
     }
 
     .user-avatar {
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
-      background: var(--primary);
+      background: rgba(255,255,255,0.3);
       color: #fff;
       font-size: 11px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
-    .user-name { font-size: 12px; color: #fff; font-weight: 500; }
+    .user-name { font-size: 13px; color: #fff; font-weight: 500; white-space: nowrap; }
 
     /* ── Body shell below topbar ── */
     .app-shell {
@@ -522,7 +528,7 @@
 
   <!-- ── Top bar ── -->
   <header class="topbar">
-    <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="topbar-brand" target="_blank" rel="noopener" title="IESIS Homepage">
+    <a href="https://iesis8.wordpress.com/" class="topbar-brand" target="_blank" rel="noopener" title="IESIS Homepage">
       <div class="topbar-logo">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
           <rect x="3" y="3" width="7" height="7" rx="1" fill="#1a3a6b"/>
@@ -540,10 +546,10 @@
     <div class="topbar-sep"></div>
 
     <nav class="topbar-nav">
-      <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="topbar-link" target="_blank" rel="noopener">
+      <a href="https://iesis8.wordpress.com/" class="topbar-link" target="_blank" rel="noopener">
         <svg aria-hidden="true"><use href="#icon-home"></use></svg> Home
       </a>
-      <button type="button" class="topbar-link active">
+      <button type="button" class="topbar-link active" data-target="page-executive-dashboard">
         <svg aria-hidden="true"><use href="#icon-dashboard"></use></svg> Executive Dashboard
       </button>
     </nav>
@@ -633,7 +639,7 @@
       </nav>
 
       <div class="sidebar-footer">
-        <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="btn-secondary" target="_blank" rel="noopener" title="Back to Main Portal">
+        <a href="https://iesis8.wordpress.com/" class="btn-secondary" target="_blank" rel="noopener" title="Back to Main Portal">
           <svg aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
           <span class="btn-label">Back to Main Portal</span>
         </a>
@@ -654,7 +660,7 @@
         <div class="quick-cards">
           <div class="quick-card">
             <div class="quick-card-icon">
-              <img src="https://marianeft.github.io/PROJ_5/images/peso-icon.png" alt="PESO Directory">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#4285f4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:60px;height:60px;"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
             </div>
             <p class="quick-card-title">PESO Directory</p>
             <p class="quick-card-desc">View the list of all registered PESO offices nationwide.</p>
@@ -666,7 +672,7 @@
 
           <div class="quick-card">
             <div class="quick-card-icon">
-              <img src="https://marianeft.github.io/PROJ_5/images/peso-icon.png" alt="PESOMP-WV Directory">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#34a853" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:60px;height:60px;"><path d="M3 21h18M9 21V7l7-4v18"/><path d="M9 7H4v14h5"/></svg>
             </div>
             <p class="quick-card-title">PESOMP-WV, Inc. Directory</p>
             <p class="quick-card-desc">View the list of all PESO Managers and Workers' Inc. nationwide.</p>
@@ -678,7 +684,7 @@
 
           <div class="quick-card">
             <div class="quick-card-icon">
-              <img src="https://marianeft.github.io/PROJ_5/images/peso-icon.png" alt="Executive Dashboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ea4335" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:60px;height:60px;"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
             </div>
             <p class="quick-card-title">Executive Dashboard</p>
             <p class="quick-card-desc">Generate and view summary data and analytics for decision-making.</p>
@@ -690,7 +696,7 @@
         </div>
 
         <!-- Stat summary -->
-        <p class="quick-access-label">Executive Dashboard — Summary</p>
+        <p class="quick-access-label">Executive Dashboard — Summary <span style="font-size:11px;color:var(--text-muted);font-weight:400;">Data as of latest PESO system records</span></p>
         <div class="stat-row">
           <div class="stat-card">
             <div class="stat-icon" style="background:#e8f0fe;">
@@ -698,7 +704,7 @@
             </div>
             <div>
               <div class="stat-value">1,634</div>
-              <div class="stat-label">Total PESO Offices</div>
+              <div class="stat-label">Total PESO Offices <span style="font-size:10px;color:#aaa;">(Source: PESO Registry)</span></div>
             </div>
           </div>
           <div class="stat-card">
@@ -707,7 +713,7 @@
             </div>
             <div>
               <div class="stat-value" style="color:#34a853;">245,678</div>
-              <div class="stat-label">Total Registered Jobseekers</div>
+              <div class="stat-label">Total Registered Jobseekers <span style="font-size:10px;color:#aaa;">(Source: PESO DB)</span></div>
             </div>
           </div>
           <div class="stat-card">
@@ -716,7 +722,7 @@
             </div>
             <div>
               <div class="stat-value" style="color:#ea4335;">38,915</div>
-              <div class="stat-label">Total Job Orders</div>
+              <div class="stat-label">Total Job Orders <span style="font-size:10px;color:#aaa;">(Source: Employers)</span></div>
             </div>
           </div>
           <div class="stat-card">
@@ -725,7 +731,7 @@
             </div>
             <div>
               <div class="stat-value" style="color:#fb8c00;">21,340</div>
-              <div class="stat-label">Total Employment Facilitated</div>
+              <div class="stat-label">Total Employment Facilitated <span style="font-size:10px;color:#aaa;">(YTD)</span></div>
             </div>
           </div>
         </div>
@@ -735,7 +741,7 @@
       <section class="content-page" id="page-peso-directory" tabindex="-1">
         <p class="content-eyebrow">PESO Services</p>
         <h1>PESO Directory</h1>
-        <div class='tableauPlaceholder' id='viz1782371413216' style='position:relative'><noscript><a href='#'><img alt='01 Executive Overview' src='https://public.tableau.com/static/images/Ga/GainifyDashboard/01ExecutiveOverview/1_rss.png' style='border:none'/></a></noscript><object class='tableauViz' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F'/><param name='embed_code_version' value='3'/><param name='site_root' value=''/><param name='name' value='GainifyDashboard/01ExecutiveOverview'/><param name='tabs' value='no'/><param name='toolbar' value='yes'/><param name='static_image' value='https://public.tableau.com/static/images/Ga/GainifyDashboard/01ExecutiveOverview/1.png'/><param name='animate_transition' value='yes'/><param name='display_static_image' value='yes'/><param name='display_spinner' value='yes'/><param name='display_overlay' value='yes'/><param name='display_count' value='yes'/><param name='language' value='en-US'/></object></div><script type='text/javascript'>var divElement=document.getElementById('viz1782371413216');var vizElement=divElement.getElementsByTagName('object')[0];vizElement.style.width='1366px';vizElement.style.height='795px';var scriptElement=document.createElement('script');scriptElement.src='https://public.tableau.com/javascripts/api/viz_v1.js';vizElement.parentNode.insertBefore(scriptElement,vizElement);</script>
+        <div class='tableauPlaceholder' id='viz1782371413216' style='position:relative;width:100%;'><noscript><a href='#'><img alt='01 Executive Overview' src='https://public.tableau.com/static/images/Ga/GainifyDashboard/01ExecutiveOverview/1_rss.png' style='border:none'/></a></noscript><object class='tableauViz' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F'/><param name='embed_code_version' value='3'/><param name='site_root' value=''/><param name='name' value='GainifyDashboard/01ExecutiveOverview'/><param name='tabs' value='no'/><param name='toolbar' value='yes'/><param name='static_image' value='https://public.tableau.com/static/images/Ga/GainifyDashboard/01ExecutiveOverview/1.png'/><param name='animate_transition' value='yes'/><param name='display_static_image' value='yes'/><param name='display_spinner' value='yes'/><param name='display_overlay' value='yes'/><param name='display_count' value='yes'/><param name='language' value='en-US'/></object></div><script type='text/javascript'>var divElement=document.getElementById('viz1782371413216');var vizElement=divElement.getElementsByTagName('object')[0];if(window.innerWidth<=880){vizElement.style.width='100%';vizElement.style.height='600px';}else{vizElement.style.width='100%';vizElement.style.height='795px';}var scriptElement=document.createElement('script');scriptElement.src='https://public.tableau.com/javascripts/api/viz_v1.js';vizElement.parentNode.insertBefore(scriptElement,vizElement);</script>
       </section>
 
       <!-- ── PESOMP-WV ── -->
@@ -822,10 +828,26 @@
     collapseToggle.addEventListener('click', toggleCollapse);
     overlay.addEventListener('click', closeMobile);
 
-    navButtons.forEach(b => b.addEventListener('click', () => {
-      showPage(b.dataset.target);
+    function handleNavigation(button) {
+      showPage(button.dataset.target);
       if (window.innerWidth <= MOBILE_BP) closeMobile();
+    }
+
+    navButtons.forEach(b => b.addEventListener('click', () => handleNavigation(b)));
+    
+    const quickCardBtns = document.querySelectorAll('.quick-card-btn[data-target]');
+    quickCardBtns.forEach(b => b.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleNavigation(b);
     }));
+    
+    const topbarDashboard = document.querySelector('.topbar-link[data-target]');
+    if (topbarDashboard) {
+      topbarDashboard.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleNavigation(topbarDashboard);
+      });
+    }
 
     window.addEventListener('resize', () => {
       if (window.innerWidth > MOBILE_BP) closeMobile();
