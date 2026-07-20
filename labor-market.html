@@ -17,7 +17,7 @@
       --text-main: #1f2937;
       --text-muted: #5b6577;
       --border-soft: #c8e6d4;
-      --topbar-height: 70px;
+      --topbar-height: 60px;
       --sidebar-width: 270px;
       --sidebar-collapsed-width: 76px;
       --radius: 6px;
@@ -36,7 +36,7 @@
       z-index: 50; border-bottom: 1px solid rgba(255,255,255,0.05);
     }
     .topbar-brand { display: flex; align-items: center; gap: 16px; text-decoration: none; flex-shrink: 0; }
-    .topbar-logo { width: 50px; height: 50px; border-radius: 8px; background: transparent; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .topbar-logo { width: 40px; height: 40px; border-radius: 8px; background: transparent; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .topbar-logo img { width: 100%; height: 100%; object-fit: contain; }
     .topbar-name { display: flex; flex-direction: column; line-height: 1.3; }
     .topbar-name strong { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
@@ -331,7 +331,7 @@
 <header class="topbar">
   <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="topbar-brand" target="_blank" rel="noopener">
     <div class="topbar-logo">
-      <img src="https://marianeft.github.io/PROJ_5/images/LOGO-IESIS.png" alt="IESIS Logo">
+      <img src="https://raw.githubusercontent.com/marianeft/PROJ_5/main/images/LOGO-%20IESIS.png" alt="IESIS Logo">
     </div>
     <div class="topbar-name">
       <strong>IESIS</strong>
@@ -347,6 +347,10 @@
         <svg aria-hidden="true"><use href="#i-dashboard"/></svg> Executive Dashboard
       </button>
     </nav>
+    <button type="button" class="topbar-help"><svg aria-hidden="true"><use href="#i-help"/></svg> Help</button>
+    <div class="topbar-user">
+      <div class="user-avatar" id="userAvatar">--</div>
+      <span class="user-name" id="userName">Loading...</span>
     </div>
     <a href="https://www.authpro.com/auth/DICTAuthPro/?action=logout" class="btn-signout">
       <svg aria-hidden="true"><use href="#i-logout"/></svg> Sign out
