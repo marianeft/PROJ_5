@@ -42,7 +42,7 @@
     .topbar-name strong { font-size: 16px; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
     .topbar-name span { font-size: 11px; color: rgba(255,255,255,0.7); font-weight: 400; }
     .topbar-sep { display: none; }
-    .topbar-nav { display: flex; align-items: center; gap: 2px; flex: 1; justify-content: center; }
+    .topbar-nav { display: flex; align-items: center; gap: 2px; }
     .topbar-link {
       display: flex; align-items: center; gap: 6px;
       padding: 8px 16px; border-radius: var(--radius);
@@ -331,32 +331,22 @@
 <header class="topbar">
   <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="topbar-brand" target="_blank" rel="noopener">
     <div class="topbar-logo">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-        <rect x="3" y="3" width="7" height="7" rx="1" fill="#1a3a6b"/>
-        <rect x="14" y="3" width="7" height="7" rx="1" fill="#4285f4"/>
-        <rect x="3" y="14" width="7" height="7" rx="1" fill="#4285f4"/>
-        <rect x="14" y="14" width="7" height="7" rx="1" fill="#1a3a6b"/>
-      </svg>
+      <img src="https://marianeft.github.io/PROJ_5/images/LOGO-IESIS.png" alt="IESIS Logo">
     </div>
     <div class="topbar-name">
       <strong>IESIS</strong>
       <span>Integrated Employment and Skills Information System</span>
     </div>
   </a>
-  <div class="topbar-sep"></div>
-  <nav class="topbar-nav">
-    <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="topbar-link" target="_blank" rel="noopener">
-      <svg aria-hidden="true"><use href="#i-home"/></svg> Home
-    </a>
-    <button type="button" class="topbar-link active" data-target="page-overview">
-      <svg aria-hidden="true"><use href="#i-dashboard"/></svg> Executive Dashboard
-    </button>
-  </nav>
   <div class="topbar-right">
-    <button type="button" class="topbar-help"><svg aria-hidden="true"><use href="#i-help"/></svg> Help</button>
-    <div class="topbar-user">
-      <div class="user-avatar" id="userAvatar">--</div>
-      <span class="user-name" id="userName">Loading...</span>
+    <nav class="topbar-nav">
+      <a href="https://sites.google.com/wvsu.edu.ph/iesis/home" class="topbar-link" target="_blank" rel="noopener">
+        <svg aria-hidden="true"><use href="#i-home"/></svg> Home
+      </a>
+      <button type="button" class="topbar-link active" data-target="page-overview">
+        <svg aria-hidden="true"><use href="#i-dashboard"/></svg> Executive Dashboard
+      </button>
+    </nav>
     </div>
     <a href="https://www.authpro.com/auth/DICTAuthPro/?action=logout" class="btn-signout">
       <svg aria-hidden="true"><use href="#i-logout"/></svg> Sign out

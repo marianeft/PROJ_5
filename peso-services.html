@@ -102,8 +102,6 @@
       display: flex;
       align-items: center;
       gap: 2px;
-      flex: 1;
-      justify-content: center;
     }
 
     .topbar-link {
@@ -530,12 +528,7 @@
   <header class="topbar">
     <a href="https://iesis8.wordpress.com/" class="topbar-brand" target="_blank" rel="noopener" title="IESIS Homepage">
       <div class="topbar-logo">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <rect x="3" y="3" width="7" height="7" rx="1" fill="#1a3a6b"/>
-          <rect x="14" y="3" width="7" height="7" rx="1" fill="#4285f4"/>
-          <rect x="3" y="14" width="7" height="7" rx="1" fill="#4285f4"/>
-          <rect x="14" y="14" width="7" height="7" rx="1" fill="#1a3a6b"/>
-        </svg>
+        <img src="https://marianeft.github.io/PROJ_5/images/LOGO-IESIS.png" alt="IESIS Logo">
       </div>
       <div class="topbar-name">
         <strong>IESIS</strong>
@@ -543,18 +536,15 @@
       </div>
     </a>
 
-    <div class="topbar-sep"></div>
-
-    <nav class="topbar-nav">
-      <a href="https://iesis8.wordpress.com/" class="topbar-link" target="_blank" rel="noopener">
-        <svg aria-hidden="true"><use href="#icon-home"></use></svg> Home
-      </a>
-      <button type="button" class="topbar-link active" data-target="page-executive-dashboard">
-        <svg aria-hidden="true"><use href="#icon-dashboard"></use></svg> Executive Dashboard
-      </button>
-    </nav>
-
     <div class="topbar-right">
+      <nav class="topbar-nav">
+        <a href="https://iesis8.wordpress.com/" class="topbar-link" target="_blank" rel="noopener">
+          <svg aria-hidden="true"><use href="#icon-home"></use></svg> Home
+        </a>
+        <button type="button" class="topbar-link active" data-target="page-executive-dashboard">
+          <svg aria-hidden="true"><use href="#icon-dashboard"></use></svg> Executive Dashboard
+        </button>
+      </nav>
       <button type="button" class="topbar-help">
         <svg aria-hidden="true"><use href="#icon-help"></use></svg> Help
       </button>
