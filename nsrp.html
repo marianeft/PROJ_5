@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NSRP Staff Dashboard</title>
+  <style>
+    :root {
+      --font-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --sidebar-bg: #f7f3ff;
+      --sidebar-hover-bg: #efe7ff;
+      --sidebar-active-bg: #7c3aed;
+      --primary: #6b46c1;
+      --primary-dark: #4c2990;
+      --text-main: #1f2937;
+      --text-muted: #64748b;
+      --border-soft: #e6dcff;
+      --topbar-bg: #2b1d58;
+      --topbar-height: 60px;
+      --radius: 6px;
+      --gap-base: 20px;
+      --transition: 0.2s ease;
+      --sidebar-width: 260px;
+      --sidebar-collapsed-width: 76px;
+      --accent-green: #10b981;
+      --accent-green-bg: #d1fae5;
+      --accent-orange: #f59e0b;
+      --accent-orange-bg: #fef3c7;
+      --accent-red: #ef4444;
+      --accent-red-bg: #fee2e2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-base);
+      color: var(--text-main);
+      background-color: #ffffff;
+    }
+
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--topbar-height);
+      background: var(--topbar-bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 50;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .topbar-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .topbar-name {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .topbar-name strong {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .topbar-name span {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .topbar-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background var(--transition), color var(--transition);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .topbar-link:hover { background: rgba(255,255,255,0.15); color: #fff; }
+    .topbar-link.active { background: rgba(255,255,255,0.2); color: #fff; font-weight: 600; }
+
+    .topbar-help,
+    .btn-signout,
+    .topbar-user {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 100px;
+      color: rgba(255,255,255,0.85);
+      font-size: 13px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.11);
+      cursor: pointer;
+    }
+
+    .topbar-help:hover,
+    .btn-signout:hover,
+    .topbar-user:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .btn-signout {
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mobile-toggle {
+      display: none;
+      position: fixed;
+      top: calc(var(--topbar-height) + 10px);
+      left: 12px;
+      z-index: 30;
+      width: 36px; height: 36px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      background: #fff;
+      cursor: pointer;
+      padding: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .mobile-toggle span { display: block; width: 16px; height: 2px; background: var(--text-main); border-radius: 2px; }
+
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.4);
+      z-index: 14;
+    }
+
+    .app-shell {
+      padding-top: var(--topbar-height);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      background-color: var(--sidebar-bg);
+      border-right: 1px solid var(--border-soft);
+      position: sticky;
+      top: var(--topbar-height);
+      height: calc(100vh - var(--topbar-height));
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      z-index: 15;
+      transition: width 0.25s ease;
+    }
+
+    .sidebar.collapsed { width: var(--sidebar-collapsed-width); }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .sidebar.collapsed .sidebar-brand { flex-direction: column; gap: 8px; padding: 12px 8px; }
+
+    .brand-logo {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .brand-title { margin: 0; font-size: 15px; font-weight: 700; color: var(--text-main); white-space: nowrap; }
+    .sidebar.collapsed .brand-title { display: none; }
+
+    .collapse-toggle {
+      margin-left: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+      width: 28px; height: 28px;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      background: #fff;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .collapse-toggle:hover { background: var(--sidebar-hover-bg); }
+    .collapse-toggle span { display: block; width: 12px; height: 2px; background: var(--text-main); border-radius: 2px; }
+    .sidebar.collapsed .collapse-toggle { margin-left: 0; }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      padding: 16px 16px 6px;
+    }
+    .sidebar.collapsed .sidebar-section-label { display: none; }
+
+    .sidebar-nav { flex: 1; padding: 8px; }
+    .sidebar-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 12px;
+      border: none;
+      border-radius: var(--radius);
+      background: none;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 13.5px;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color var(--transition), color var(--transition);
+    }
+
+    .nav-link svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .nav-link:hover { background-color: var(--sidebar-hover-bg); color: var(--text-main); }
+    .nav-link.active { background-color: var(--primary); color: #fff; font-weight: 600; }
+    .nav-link.active:hover { background-color: var(--primary); }
+    .nav-label { white-space: nowrap; }
+
+    .sidebar.collapsed .nav-link { justify-content: center; padding: 10px 0; gap: 0; }
+    .sidebar.collapsed .nav-label { display: none; }
+
+    .sidebar-footer { padding: 14px; border-top: 1px solid var(--border-soft); }
+    .sidebar.collapsed .sidebar-footer { padding: 10px 8px; }
+
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--primary);
+      background: transparent;
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background var(--transition), color var(--transition);
+    }
+    .btn-secondary:hover { background: var(--primary); color: #fff; }
+    .sidebar.collapsed .btn-secondary { padding: 10px 0; }
+    .sidebar.collapsed .btn-label { display: none; }
+
+    .main-content { flex: 1; padding: 0 36px 32px 36px; min-width: 0; }
+
+    .content-page { display: none; }
+    .content-page.active { display: block; }
+    .content-page:focus { outline: none; }
+
+    .content-eyebrow { color: var(--primary); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; margin: 0 0 6px; }
+    .main-content h1 { margin: 0 0 6px; font-size: 26px; font-weight: 700; color: var(--text-main); }
+    .page-subtitle { margin: 0 0 28px; color: var(--text-muted); font-size: 14px; max-width: 720px; line-height: 1.6; }
+
+    .quick-access-label { font-size: 13px; font-weight: 700; color: var(--text-main); margin: 0 0 14px; }
+
+    .quick-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .quick-card {
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #fff;
+      transition: box-shadow var(--transition), border-color var(--transition);
+    }
+    .quick-card:hover { box-shadow: 0 4px 16px rgba(107,70,193,0.12); border-color: var(--primary); }
+
+    .quick-card-icon {
+      width: 72px; height: 72px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #f5ecff; color: var(--primary); }
+    .quick-card-title { font-size: 14px; font-weight: 700; color: var(--text-main); margin: 0; }
+    .quick-card-desc { font-size: 12px; color: var(--text-muted); margin: 0; line-height: 1.5; }
+
+    .quick-card-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: auto;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: none;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity var(--transition);
+      text-decoration: none;
+      width: fit-content;
+      color: #fff;
+      background: var(--primary);
+    }
+    .quick-card-btn:hover { opacity: 0.9; }
+
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--sidebar-bg); border: 1px solid var(--border-soft); border-radius: 8px; padding: 18px; display: flex; align-items: center; gap: 14px; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: #efe7ff; color: var(--primary); }
+    .stat-value { font-size: 22px; font-weight: 700; color: var(--primary); }
+    .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .panel-title { font-size: 16px; font-weight: 700; color: var(--text-main); margin: 0 0 12px; }
+
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { text-align: left; padding: 10px 8px; border-bottom: 2px solid var(--border-soft); color: var(--text-muted); font-weight: 700; }
+    .data-table td { padding: 12px 8px; border-bottom: 1px solid var(--border-soft); vertical-align: middle; }
+
+    .badge { padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; display: inline-block; }
+    .badge.verified { background: var(--accent-green-bg); color: var(--accent-green); }
+    .badge.pending { background: var(--accent-orange-bg); color: var(--accent-orange); }
+    .badge.action { background: var(--accent-red-bg); color: var(--accent-red); }
+
+    .content-placeholder {
+      border: 1.5px dashed var(--border-soft);
+      border-radius: 8px;
+      padding: 44px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      background: #fcfbff;
+    }
+
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+    @media (max-width: 960px) {
+      .quick-cards { grid-template-columns: 1fr 1fr; }
+      .stat-row { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 880px) {
+      .collapse-toggle { display: none; }
+      .mobile-toggle { display: flex; }
+      .sidebar { position: fixed; top: var(--topbar-height); left: -100%; width: min(var(--sidebar-width), 80vw); height: calc(100vh - var(--topbar-height)); transition: left 0.3s ease; }
+      .sidebar.collapsed { width: min(var(--sidebar-width), 80vw); }
+      .sidebar.open { left: 0; }
+      .sidebar-overlay.open { display: block; }
+      .main-content { padding: 24px 20px 24px 60px; }
+      .topbar-name span { display: none; }
+      .topbar-user .user-name { display: none; }
+    }
+
+    @media (max-width: 560px) {
+      .quick-cards { grid-template-columns: 1fr; }
+      .stat-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <svg style="display:none" aria-hidden="true">
+    <defs>
+      <symbol id="icon-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/>
+      </symbol>
+      <symbol id="icon-folder" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>
+      </symbol>
+      <symbol id="icon-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+      </symbol>
+      <symbol id="icon-report" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/>
+      </symbol>
+      <symbol id="icon-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/>
+      </symbol>
+      <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>
+      </symbol>
+      <symbol id="icon-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="9" cy="18" r="2"/>
+      </symbol>
+      <symbol id="icon-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></symbol>
+      <symbol id="icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+      <symbol id="icon-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <a href="https://iesis8.wordpress.com/" class="topbar-brand" target="_blank" rel="noopener" title="IESIS Homepage">
+      <div class="topbar-logo">NSRP</div>
+      <div class="topbar-name">
+        <strong>IESIS</strong>
+        <span>National Skills Registration Program</span>
+      </div>
+    </a>
+
+    <div class="topbar-right">
+      <nav class="topbar-nav">
+        <a href="https://iesis8.wordpress.com/" class="topbar-link" target="_blank" rel="noopener">
+          <svg aria-hidden="true" width="16" height="16"><use href="#icon-home"></use></svg> Home
+        </a>
+        <button type="button" class="topbar-link active" data-target="page-overview">
+          <svg aria-hidden="true" width="16" height="16"><use href="#icon-dashboard"></use></svg> NSRP Dashboard
+        </button>
+      </nav>
+      <button type="button" class="topbar-help">
+        <svg aria-hidden="true" width="16" height="16"><use href="#icon-help"></use></svg> Help
+      </button>
+      <div class="topbar-user">
+        <div class="user-avatar" id="userAvatar">JD</div>
+        <span class="user-name" id="userName">Juan Dela Cruz</span>
+      </div>
+      <a href="https://www.authpro.com/auth/DICTAuthPro/?action=logout" class="btn-signout">
+        <svg aria-hidden="true" width="14" height="14"><use href="#icon-logout"></use></svg> Sign out
+      </a>
+    </div>
+  </header>
+
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo">NSRP</div>
+        <h2 class="brand-title">NSRP Portal</h2>
+        <button class="collapse-toggle" id="collapseToggle" aria-label="Collapse sidebar" aria-expanded="true">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="NSRP section navigation">
+        <ul>
+          <li>
+            <button type="button" class="nav-link active" data-target="page-overview" aria-current="page" title="Overview">
+              <svg aria-hidden="true"><use href="#icon-home"></use></svg>
+              <span class="nav-label">Overview</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="nav-link" data-target="page-registrations" title="Applicant Registrations">
+              <svg aria-hidden="true"><use href="#icon-folder"></use></svg>
+              <span class="nav-label">Registrations</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="nav-link" data-target="page-assessments" title="Skills Assessment">
+              <svg aria-hidden="true"><use href="#icon-dashboard"></use></svg>
+              <span class="nav-label">Assessments</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="nav-link" data-target="page-verification" title="Verification & Compliance">
+              <svg aria-hidden="true"><use href="#icon-report"></use></svg>
+              <span class="nav-label">Verification</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="nav-link" data-target="page-registry" title="Talent Registry">
+              <svg aria-hidden="true"><use href="#icon-database"></use></svg>
+              <span class="nav-label">Talent Registry</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="nav-link" data-target="page-reports" title="Reports">
+              <svg aria-hidden="true"><use href="#icon-report"></use></svg>
+              <span class="nav-label">Reports</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="nav-link" data-target="page-settings" title="Settings">
+              <svg aria-hidden="true"><use href="#icon-settings"></use></svg>
+              <span class="nav-label">Settings</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="https://iesis8.wordpress.com/" class="btn-secondary" target="_blank" rel="noopener" title="Back to Main Portal">
+          <svg aria-hidden="true" width="15" height="15"><use href="#icon-arrow-left"></use></svg>
+          <span class="btn-label">Back to Main Portal</span>
+        </a>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main class="main-content">
+      <section class="content-page active" id="page-overview" tabindex="-1">
+        <p class="content-eyebrow">NSRP</p>
+        <h1>National Skills Registration Program</h1>
+        <p class="page-subtitle">Manage applicant registrations, align assessments, and maintain a responsive skills registry for workforce development.</p>
+
+        <p class="quick-access-label">Quick Access</p>
+        <div class="quick-cards">
+          <div class="quick-card">
+            <div class="quick-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px;"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+            </div>
+            <p class="quick-card-title">Applicant Registrations</p>
+            <p class="quick-card-desc">Review incoming registrations and verify the required documentation.</p>
+            <button type="button" class="quick-card-btn" data-target="page-registrations">Open Registrations</button>
+          </div>
+
+          <div class="quick-card">
+            <div class="quick-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px;"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            </div>
+            <p class="quick-card-title">Assessment Coordination</p>
+            <p class="quick-card-desc">Coordinate assessment schedules and monitor completion rates.</p>
+            <button type="button" class="quick-card-btn" data-target="page-assessments">Open Assessments</button>
+          </div>
+
+          <div class="quick-card">
+            <div class="quick-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px;"><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v6c0 1.7 3.1 3 7 3s7-1.3 7-3V5"/><path d="M5 11v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>
+            </div>
+            <p class="quick-card-title">Talent Registry</p>
+            <p class="quick-card-desc">Search verified profiles and match them with available opportunities.</p>
+            <button type="button" class="quick-card-btn" data-target="page-registry">Open Registry</button>
+          </div>
+        </div>
+
+        <p class="quick-access-label">Operational Summary</p>
+        <div class="stat-row">
+          <div class="stat-card">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M3 21h18M9 21V7l7-4v18"/><path d="M9 7H4v14h5"/></svg></div>
+            <div>
+              <div class="stat-value">1.2M</div>
+              <div class="stat-label">Registered Profiles</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+            <div>
+              <div class="stat-value" style="color:#f59e0b;">3,450</div>
+              <div class="stat-label">Pending Assessments</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></div>
+            <div>
+              <div class="stat-value" style="color:#10b981;">850K</div>
+              <div class="stat-label">Verified Credentials</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+            <div>
+              <div class="stat-value" style="color:#7c3aed;">12,300</div>
+              <div class="stat-label">Successful Placements</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3 class="panel-title">Recent Registration Activities</h3>
+          <div style="overflow-x:auto;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Applicant</th>
+                  <th>Skill Category</th>
+                  <th>Action</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Oct 24, 2024 10:00 AM</td>
+                  <td>Maria Santos</td>
+                  <td>Information Technology</td>
+                  <td>Document Verification</td>
+                  <td><span class="badge verified">Verified</span></td>
+                </tr>
+                <tr>
+                  <td>Oct 24, 2024 09:15 AM</td>
+                  <td>Jose Reyes</td>
+                  <td>Welding (NC II)</td>
+                  <td>Schedule Assessment</td>
+                  <td><span class="badge pending">Pending</span></td>
+                </tr>
+                <tr>
+                  <td>Oct 23, 2024 04:30 PM</td>
+                  <td>Ana Cruz</td>
+                  <td>Healthcare Services</td>
+                  <td>Upload Missing ID</td>
+                  <td><span class="badge action">Action Needed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-page" id="page-registrations" tabindex="-1">
+        <p class="content-eyebrow">NSRP</p>
+        <h1>Applicant Registrations</h1>
+        <p class="page-subtitle">Track new registrations and ensure each applicant is routed to the correct review stage.</p>
+        <div class="content-placeholder">Registration review queue and applicant intake tools go here.</div>
+      </section>
+
+      <section class="content-page" id="page-assessments" tabindex="-1">
+        <p class="content-eyebrow">NSRP</p>
+        <h1>Skills Assessment Management</h1>
+        <p class="page-subtitle">Coordinate assessment schedules, monitor completion, and manage testing center assignments.</p>
+        <div class="content-placeholder">Assessment calendar and assignment board go here.</div>
+      </section>
+
+      <section class="content-page" id="page-verification" tabindex="-1">
+        <p class="content-eyebrow">NSRP</p>
+        <h1>Verification & Compliance</h1>
+        <p class="page-subtitle">Validate credentials, monitor compliance requirements, and resolve outstanding requests.</p>
+        <div class="content-placeholder">Verification workflow and compliance tracker go here.</div>
+      </section>
+
+      <section class="content-page" id="page-registry" tabindex="-1">
+        <p class="content-eyebrow">NSRP</p>
+        <h1>Talent Registry</h1>
+        <p class="page-subtitle">Search and filter the national skills registry to match jobseekers with workforce opportunities.</p>
+        <div class="content-placeholder">Registry search and profile explorer go here.</div>
+      </section>
+
+      <section class="content-page" id="page-reports" tabindex="-1">
+        <p class="content-eyebrow">NSRP</p>
+        <h1>Reports</h1>
+        <p class="page-subtitle">Review operational reports, completion trends, and regional performance summaries.</p>
+        <div class="content-placeholder">Reports and analytics widgets go here.</div>
+      </section>
+
+      <section class="content-page" id="page-settings" tabindex="-1">
+        <p class="content-eyebrow">NSRP</p>
+        <h1>System Settings</h1>
+        <p class="page-subtitle">Configure preferences and maintain the NSRP environment for regional and central users.</p>
+        <div class="content-placeholder">Settings form and administrator controls go here.</div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const MOBILE_BP = 880;
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const mobileToggle = document.getElementById('mobileToggle');
+    const collapseToggle = document.getElementById('collapseToggle');
+    const navButtons = document.querySelectorAll('.nav-link[data-target]');
+    const pages = document.querySelectorAll('.content-page');
+
+    const openMobile = () => { sidebar.classList.add('open'); overlay.classList.add('open'); mobileToggle.setAttribute('aria-expanded','true'); };
+    const closeMobile = () => { sidebar.classList.remove('open'); overlay.classList.remove('open'); mobileToggle.setAttribute('aria-expanded','false'); };
+
+    function toggleCollapse() {
+      const collapsed = sidebar.classList.toggle('collapsed');
+      collapseToggle.setAttribute('aria-expanded', String(!collapsed));
+      collapseToggle.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    }
+
+    function showPage(id) {
+      pages.forEach(p => p.classList.toggle('active', p.id === id));
+      navButtons.forEach(b => {
+        const active = b.dataset.target === id;
+        b.classList.toggle('active', active);
+        active ? b.setAttribute('aria-current','page') : b.removeAttribute('aria-current');
+      });
+      document.getElementById(id)?.focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    mobileToggle.addEventListener('click', () => sidebar.classList.contains('open') ? closeMobile() : openMobile());
+    collapseToggle.addEventListener('click', toggleCollapse);
+    overlay.addEventListener('click', closeMobile);
+
+    function handleNavigation(button) {
+      showPage(button.dataset.target);
+      if (window.innerWidth <= MOBILE_BP) closeMobile();
+    }
+
+    navButtons.forEach(b => b.addEventListener('click', () => handleNavigation(b)));
+
+    const quickCardBtns = document.querySelectorAll('.quick-card-btn[data-target]');
+    quickCardBtns.forEach(b => b.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleNavigation(b);
+    }));
+
+    const topbarDashboard = document.querySelector('.topbar-link[data-target]');
+    if (topbarDashboard) {
+      topbarDashboard.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleNavigation(topbarDashboard);
+      });
+    }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > MOBILE_BP) closeMobile();
+      else sidebar.classList.remove('collapsed');
+    });
+  </script>
+</body>
+</html>
