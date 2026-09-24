@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/home", "destination": "/home.html" },
+    { "source": "/peso-services", "destination": "/peso-services.html" },
+    { "source": "/labor-market", "destination": "/labor-market.html" },
+    { "source": "/cdsp-programs", "destination": "/cdsp-programs.html" },
+    { "source": "/nsrp", "destination": "/nsrp.html" }
+  ]
+}
