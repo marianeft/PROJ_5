@@ -13,6 +13,57 @@
       color: #1f2937;
     }
 
+    #main-content { display: none; }
+
+    #skeleton-screen {
+      min-height: 100vh;
+      padding: 32px 24px 60px;
+      background: #ffffff;
+      opacity: 1;
+      transition: opacity 0.25s ease;
+    }
+
+    #skeleton-screen.is-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .skeleton-card {
+      width: min(100%, 520px);
+      margin: 0 auto;
+      padding: 24px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 8px 28px rgba(31, 41, 55, 0.1);
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, #eceff1 25%, #f6f7f8 50%, #eceff1 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s linear infinite;
+      border-radius: 8px;
+    }
+
+    .skeleton-image {
+      width: 100%;
+      height: 180px;
+      margin-bottom: 24px;
+    }
+
+    .skeleton-text { height: 14px; margin-bottom: 12px; }
+    .skeleton-title { width: 68%; height: 24px; margin-bottom: 20px; }
+    .skeleton-line-full { width: 100%; }
+    .skeleton-line-partial { width: 72%; }
+
+    @keyframes shimmer {
+      from { background-position: 200% 0; }
+      to { background-position: -200% 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .skeleton { animation: none; }
+    }
+
     /* ═══ TOPBAR ══════════════════════════════════════════ */
     .topbar {
       background: #1f2b6f;
@@ -404,6 +455,18 @@
 </head>
 <body>
 
+  <div id="skeleton-screen" role="status" aria-live="polite" aria-label="Loading IESIS portal">
+    <div class="skeleton-card">
+      <div class="skeleton skeleton-image"></div>
+      <div class="skeleton skeleton-text skeleton-title"></div>
+      <div class="skeleton skeleton-text skeleton-line-full"></div>
+      <div class="skeleton skeleton-text skeleton-line-full"></div>
+      <div class="skeleton skeleton-text skeleton-line-partial"></div>
+    </div>
+  </div>
+
+  <div id="main-content">
+
   <!-- ── Topbar ─────────────────────────────────────────── -->
   <header class="topbar">
     <a href="/" class="topbar-brand">
@@ -583,7 +646,20 @@
     © IESIS Services Portal — Integrated Employment and Skills Information System
   </footer>
 
+  </div>
+
   <script>
+    window.addEventListener('load', () => {
+      window.setTimeout(() => {
+        const skeleton = document.getElementById('skeleton-screen');
+        const mainContent = document.getElementById('main-content');
+        if (!skeleton || !mainContent) return;
+        mainContent.style.display = 'block';
+        skeleton.classList.add('is-hidden');
+        window.setTimeout(() => { skeleton.style.display = 'none'; }, 250);
+      }, 2000);
+    });
+
     // Load user data
     async function loadUserData() {
       try {
