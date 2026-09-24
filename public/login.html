@@ -262,7 +262,7 @@
         const response = await fetch('/api/user');
         if (response.ok) {
           // User is already authenticated, redirect to home
-          window.location.href = '/';
+          window.location.href = '/home';
         }
       } catch (error) {
         // Not authenticated, stay on login
@@ -303,7 +303,10 @@
           localStorage.setItem('token', data.token);
 
           // Redirect after a short delay
-          const returnUrl = new URLSearchParams(window.location.search).get('return') || '/';
+          const requestedReturnUrl = new URLSearchParams(window.location.search).get('return');
+          const returnUrl = requestedReturnUrl && requestedReturnUrl.startsWith('/') && !requestedReturnUrl.startsWith('//')
+            ? requestedReturnUrl
+            : '/home';
           setTimeout(() => {
             window.location.href = returnUrl;
           }, 500);
