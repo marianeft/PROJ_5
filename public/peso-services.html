@@ -159,6 +159,7 @@
     }
     .btn-signout:hover { background: rgba(255,255,255,0.3); color: #fff; }
     .btn-signout svg { width: 14px; height: 14px; }
+    .auth-control[hidden] { display: none; }
 
     .topbar-user {
       display: flex;
@@ -301,6 +302,23 @@
 
     .sidebar-footer { padding: 14px; border-top: 1px solid var(--border-soft); }
     .sidebar.collapsed .sidebar-footer { padding: 10px 8px; }
+
+    .need-help {
+      margin-top: 10px;
+      padding: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--sidebar-hover-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+    }
+    .need-help svg { width: 20px; height: 20px; color: var(--primary); flex-shrink: 0; }
+    .need-help-text { font-size: 12px; line-height: 1.45; }
+    .need-help-text strong { display: block; color: var(--text-main); margin-bottom: 2px; }
+    .need-help-text span { color: var(--text-muted); }
+    .sidebar.collapsed .need-help { padding: 8px; justify-content: center; }
+    .sidebar.collapsed .need-help-text { display: none; }
 
     .btn-secondary {
       display: flex;
@@ -525,9 +543,9 @@
 
   <!-- ── Top bar ── -->
   <header class="topbar">
-    <a href="https://iesis8.wordpress.com/" class="topbar-brand" target="_blank" rel="noopener" title="IESIS Homepage">
+    <a href="home.html" class="topbar-brand" title="IESIS Homepage">
       <div class="topbar-logo">
-        <img src="https://raw.githubusercontent.com/marianeft/PROJ_5/main/images/LOGO-%20IESIS.png" alt="IESIS Logo">
+        <img src="/images/LOGO- IESIS.png" alt="IESIS Logo">
       </div>
       <div class="topbar-name">
         <strong>IESIS</strong>
@@ -537,7 +555,7 @@
 
     <div class="topbar-right">
       <nav class="topbar-nav">
-        <a href="https://iesis8.wordpress.com/" class="topbar-link" target="_blank" rel="noopener">
+        <a href="home.html" class="topbar-link">
           <svg aria-hidden="true"><use href="#icon-home"></use></svg> Home
         </a>
         <button type="button" class="topbar-link active" data-target="page-executive-dashboard">
@@ -551,7 +569,10 @@
         <div class="user-avatar" id="userAvatar">--</div>
         <span class="user-name" id="userName">Loading...</span>
       </div>
-      <a href="https://www.authpro.com/auth/DICTAuthPro/?action=logout" class="btn-signout">
+      <a href="login.html" class="btn-signout auth-control" id="signInBtn" hidden>
+        <svg aria-hidden="true"><use href="#icon-arrow-right"></use></svg> Sign In
+      </a>
+      <a href="login.html" class="btn-signout auth-control" id="signOutBtn" hidden>
         <svg aria-hidden="true"><use href="#icon-logout"></use></svg> Sign out
       </a>
     </div>
@@ -566,7 +587,7 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-brand">
         <div class="brand-logo">
-          <img src="https://marianeft.github.io/PROJ_5/images/peso-icon.png" alt="PESO Services">
+          <img src="/images/peso-icon.png" alt="PESO Services">
         </div>
         <h2 class="brand-title">PESO Services</h2>
         <button class="collapse-toggle" id="collapseToggle" aria-label="Collapse sidebar" aria-expanded="true">
@@ -628,10 +649,17 @@
       </nav>
 
       <div class="sidebar-footer">
-        <a href="https://iesis8.wordpress.com/" class="btn-secondary" target="_blank" rel="noopener" title="Back to Main Portal">
+        <a href="index.html" class="btn-secondary" title="Back to Main Portal">
           <svg aria-hidden="true"><use href="#icon-arrow-left"></use></svg>
           <span class="btn-label">Back to Main Portal</span>
         </a>
+        <div class="need-help">
+          <svg aria-hidden="true"><use href="#icon-help"></use></svg>
+          <div class="need-help-text">
+            <strong>Need Help?</strong>
+            <span>Visit our Help Center or contact support.</span>
+          </div>
+        </div>
       </div>
     </aside>
 
@@ -641,15 +669,15 @@
 
       <!-- ── Overview ── -->
       <div class='tableauPlaceholder' id='viz1787127706289' style='position: relative'>
-      <noscript><a href='#'><img alt='Dashboard 1 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Sa&#47;Sample_17871050455690&#47;Dashboard1&#47;1_rss.png' style='border: none' /></a>
+      <noscript><a href='#'><img alt='Dashboard ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bo&#47;Book1_17902140235850&#47;Dashboard&#47;1_rss.png' style='border: none' /></a>
       </noscript>
           <object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> 
             <param name='embed_code_version' value='3' /> 
             <param name='site_root' value='' />
-            <param name='name' value='Sample_17871050455690&#47;Dashboard1' />
+            <param name='name' value='Book1_17902140235850&#47;Dashboard' />
             <param name='tabs' value='no' />
             <param name='toolbar' value='yes' />
-            <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Sa&#47;Sample_17871050455690&#47;Dashboard1&#47;1.png' /> 
+            <param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bo&#47;Book1_17902140235850&#47;Dashboard&#47;1.png' />
             <param name='animate_transition' value='yes' />
             <param name='display_static_image' value='yes' />
             <param name='display_spinner' value='yes' />
@@ -790,48 +818,53 @@
   </script>
 
 <script>
-  /* ── Dynamic AuthPro username ── */
-  (function () {
-    function getCookie(name) {
-      const match = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '=([^;]*)'));
-      return match ? decodeURIComponent(match[1]) : null;
-    }
+  const signInButton = document.getElementById('signInBtn');
+  const signOutButton = document.getElementById('signOutBtn');
+  const avatarElement = document.getElementById('userAvatar');
+  const nameElement = document.getElementById('userName');
 
-    function getAuthProUser() {
-      const candidates = [
-        'DICTAuthPro_username', 'DICTAuthPro_user', 'DICTAuthPro',
-        'authpro_username', 'authpro_user', 'ap_user', 'ap_username'
-      ];
-      for (const name of candidates) {
-        const val = getCookie(name);
-        if (val && val.trim()) return val.trim();
+  function renderAuthState(user) {
+    const authenticated = Boolean(user);
+    signInButton.hidden = authenticated;
+    signOutButton.hidden = !authenticated;
+    if (user) {
+      const displayName = user.full_name || user.username || 'Staff';
+      nameElement.textContent = displayName;
+      avatarElement.textContent = displayName.trim().slice(0, 2).toUpperCase();
+    } else {
+      nameElement.textContent = 'Guest';
+      avatarElement.textContent = 'GU';
+    }
+  }
+
+  async function loadSession() {
+    try {
+      const response = await fetch('/api/user', { credentials: 'same-origin' });
+      if (!response.ok) {
+        renderAuthState(null);
+        return;
       }
-      const all = document.cookie.split(';').map(c => c.trim());
-      for (const c of all) {
-        if (/authpro|dictauth/i.test(c)) {
-          const val = c.split('=')[1];
-          if (val && val.trim() && val.length < 60) return decodeURIComponent(val.trim());
-        }
-      }
-      return null;
+      renderAuthState(await response.json());
+    } catch (error) {
+      console.error('Unable to load session:', error);
+      renderAuthState(null);
     }
+  }
 
-    const username = getAuthProUser();
-    const avatarEl = document.getElementById('userAvatar');
-    const nameEl   = document.getElementById('userName');
-
-    if (username && avatarEl && nameEl) {
-      nameEl.textContent = username;
-      const parts = username.split(/[\s._@-]+/).filter(Boolean);
-      const initials = parts.length >= 2
-        ? (parts[0][0] + parts[1][0]).toUpperCase()
-        : username.substring(0, 2).toUpperCase();
-      avatarEl.textContent = initials;
-    } else if (nameEl) {
-      nameEl.textContent = 'Staff';
-      if (avatarEl) avatarEl.textContent = 'ST';
+  signOutButton.addEventListener('click', async (event) => {
+    event.preventDefault();
+    signOutButton.setAttribute('aria-busy', 'true');
+    signOutButton.textContent = 'Signing out...';
+    try {
+      await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
+    } catch (error) {
+      console.error('Sign-out request failed:', error);
+    } finally {
+      window.location.href = 'login.html';
     }
-  })();
+  });
+
+  loadSession();
 </script>
 
 </body>

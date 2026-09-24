@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://www.authpro.com/auth/DICTAuthPro/?action=pp"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Career Development Support Program — IESIS Portal</title>
@@ -111,6 +110,7 @@
     }
     .btn-signout:hover { background: rgba(255,255,255,.28); }
     .btn-signout svg { width: 14px; height: 14px; }
+    .auth-control[hidden] { display: none; }
 
     /* ═══ SHELL ════════════════════════════════════════════ */
     .app-shell {
@@ -218,6 +218,21 @@
     .sidebar-help-icon svg { width: 18px; height: 18px; color: var(--cdsp); }
     .sidebar-help strong { display: block; font-size: 12.5px; color: var(--text); margin-bottom: 3px; }
     .sidebar-help span { font-size: 11.5px; color: var(--muted); line-height: 1.4; display: block; }
+
+    .sidebar-footer { padding: 14px; border-top: 1px solid var(--border-soft); flex-shrink: 0; }
+    .sidebar-footer .btn-secondary {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 10px 14px; border-radius: var(--radius);
+      border: 1.5px solid var(--cdsp); background: transparent; color: var(--cdsp);
+      font-size: 13px; font-weight: 600; text-decoration: none;
+      transition: background var(--ease), color var(--ease);
+    }
+    .sidebar-footer .btn-secondary:hover { background: var(--cdsp); color: #fff; }
+    .sidebar-footer .btn-secondary svg { width: 15px; height: 15px; }
+    .sidebar.collapsed .sidebar-footer { padding: 10px 8px; }
+    .sidebar.collapsed .sidebar-footer .btn-secondary { padding: 10px 0; }
+    .sidebar.collapsed .sidebar-footer .btn-label { display: none; }
+    .sidebar-footer .sidebar-help { margin: 10px 0 0; }
 
     /* ═══ MOBILE TOGGLE ════════════════════════════════════ */
     .mobile-toggle {
@@ -571,9 +586,9 @@
 
 <!-- ── Topbar ─────────────────────────────────────────── -->
 <header class="topbar">
-  <a href="https://iesis8.wordpress.com/" class="topbar-brand" target="_blank" rel="noopener" title="IESIS Homepage">
+  <a href="home.html" class="topbar-brand" title="IESIS Homepage">
     <div class="topbar-logo">
-      <img src="https://raw.githubusercontent.com/marianeft/PROJ_5/main/images/LOGO-%20IESIS.png" alt="IESIS Logo">
+      <img src="/images/LOGO- IESIS.png" alt="IESIS Logo">
     </div>
     <div class="topbar-name">
       <strong>IESIS</strong>
@@ -583,7 +598,7 @@
 
   <div class="topbar-right">
     <nav style="display:flex;align-items:center;gap:2px;">
-      <a href="https://iesis8.wordpress.com/" class="topbar-link" target="_blank" rel="noopener">
+      <a href="home.html" class="topbar-link">
         <svg aria-hidden="true"><use href="#ic-home"></use></svg> Home
       </a>
       <button type="button" class="topbar-link">
@@ -598,7 +613,10 @@
       <div class="user-avatar" id="cdspUserAvatar">--</div>
       <span class="user-name" id="cdspUserName">Loading…</span>
     </div>
-    <a href="https://www.authpro.com/auth/DICTAuthPro/?action=logout" class="btn-signout">
+    <a href="login.html" class="btn-signout auth-control" id="cdspSignInBtn" hidden>
+      <svg aria-hidden="true"><use href="#ic-back"></use></svg> Sign in
+    </a>
+    <a href="login.html" class="btn-signout auth-control" id="cdspSignOutBtn" hidden>
       <svg aria-hidden="true"><use href="#ic-logout"></use></svg> Sign out
     </a>
   </div>
@@ -695,30 +713,25 @@
           </button></li>
         </ul>
 
-        <!-- Back link -->
-        <hr class="nav-divider">
-        <ul>
-          <li>
-            <a href="https://iesis8.wordpress.com/" class="nav-link" target="_blank" rel="noopener" title="Back to Main Portal">
-              <svg aria-hidden="true"><use href="#ic-back"></use></svg>
-              <span class="nav-label">Back to Main Portal</span>
-            </a>
-          </li>
-        </ul>
       </nav>
     </div>
 
-    <!-- Need Help? callout -->
-    <div class="sidebar-help">
-      <div class="sidebar-help-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
-          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
-        </svg>
-      </div>
-      <div>
-        <strong>Need Help?</strong>
-        <span>Visit our Help Center or contact support.</span>
+    <div class="sidebar-footer">
+      <a href="index.html" class="btn-secondary" title="Back to Main Portal">
+        <svg aria-hidden="true"><use href="#ic-back"></use></svg>
+        <span class="btn-label">Back to Main Portal</span>
+      </a>
+      <div class="sidebar-help">
+        <div class="sidebar-help-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+            <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Need Help?</strong>
+          <span>Visit our Help Center or contact support.</span>
+        </div>
       </div>
     </div>
 
@@ -1136,43 +1149,35 @@
     else sidebar.classList.remove('collapsed');
   });
 
-  /* ── AuthPro cookie username ── */
-  (function () {
-    function getCookie(name) {
-      var m = document.cookie.match(
-        new RegExp('(?:^|; )' + name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '=([^;]*)'));
-      return m ? decodeURIComponent(m[1]) : null;
-    }
-    var cands = ['DICTAuthPro_username','DICTAuthPro_user','DICTAuthPro',
-                 'authpro_username','authpro_user','ap_user','ap_username'];
-    var uname = null;
-    for (var i = 0; i < cands.length; i++) {
-      var v = getCookie(cands[i]);
-      if (v && v.trim()) { uname = v.trim(); break; }
-    }
-    if (!uname) {
-      var all = document.cookie.split(';');
-      for (var j = 0; j < all.length; j++) {
-        var c = all[j].trim();
-        if (/authpro|dictauth/i.test(c)) {
-          var val = c.split('=')[1];
-          if (val && val.trim() && val.length < 60) { uname = decodeURIComponent(val.trim()); break; }
-        }
-      }
-    }
-    var avatarEl = document.getElementById('cdspUserAvatar');
-    var nameEl   = document.getElementById('cdspUserName');
-    if (uname && avatarEl && nameEl) {
-      nameEl.textContent = uname;
-      var parts = uname.split(/[\s._@-]+/).filter(Boolean);
-      avatarEl.textContent = parts.length >= 2
-        ? (parts[0][0] + parts[1][0]).toUpperCase()
-        : uname.substring(0,2).toUpperCase();
-    } else {
-      if (nameEl) nameEl.textContent = 'Staff';
-      if (avatarEl) avatarEl.textContent = 'ST';
-    }
-  })();
+  var signIn = document.getElementById('cdspSignInBtn');
+  var signOut = document.getElementById('cdspSignOutBtn');
+  var avatar = document.getElementById('cdspUserAvatar');
+  var name = document.getElementById('cdspUserName');
+
+  function renderSession(user) {
+    var authenticated = Boolean(user);
+    signIn.hidden = authenticated;
+    signOut.hidden = !authenticated;
+    var displayName = user && (user.full_name || user.username);
+    name.textContent = displayName || 'Guest';
+    avatar.textContent = (displayName || 'GU').trim().slice(0, 2).toUpperCase();
+  }
+
+  fetch('/api/user', { credentials: 'same-origin' })
+    .then(function (response) { return response.ok ? response.json() : null; })
+    .then(renderSession)
+    .catch(function (error) {
+      console.error('Unable to load session:', error);
+      renderSession(null);
+    });
+
+  signOut.addEventListener('click', function (event) {
+    event.preventDefault();
+    signOut.setAttribute('aria-busy', 'true');
+    fetch('/api/logout', { method: 'POST', credentials: 'same-origin' })
+      .catch(function (error) { console.error('Sign-out request failed:', error); })
+      .finally(function () { window.location.href = 'login.html'; });
+  });
 
 }());
 </script>
