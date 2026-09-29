@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IESIS — Integrated Employment and Skills Information System</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #ffffff;
+      color: #1f2937;
+    }
+
+    /* ═══ TOPBAR ══════════════════════════════════════════ */
+    .topbar {
+      background: #1f2b6f;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .topbar-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .topbar-logo img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+    }
+
+    .topbar-wordmark {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.02em;
+    }
+
+    .topbar-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0 auto;
+    }
+
+    .nav-link {
+      padding: 8px 18px;
+      color: rgba(255,255,255,0.88);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background 0.2s ease, color 0.2s ease;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+    }
+    .nav-link:hover { color: #ffffff; background: rgba(255,255,255,0.1); }
+    .nav-link.active {
+      color: #ffffff;
+      border-bottom-color: #ffffff;
+      font-weight: 600;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-left: auto;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .user-details strong {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .user-details small {
+      font-size: 10.5px;
+      opacity: 0.8;
+    }
+
+    .btn-logout {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .btn-logout:hover { background: rgba(255, 255, 255, 0.25); }
+
+    /* ═══ HERO ═════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 380px;
+      background: #c8e8f5;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center bottom;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 52px 24px 40px;
+      max-width: 800px;
+    }
+
+    .hero-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      color: #0d1b4b;
+      line-height: 1.25;
+      margin-bottom: 20px;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.88rem, 1.8vw, 1rem);
+      color: #1f2b6f;
+      font-style: italic;
+      line-height: 1.7;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ═══ CARDS SECTION ════════════════════════════════════ */
+    .cards-section {
+      background: #ffffff;
+      padding: 48px 24px 60px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Individual card */
+    .card {
+      border-radius: 10px;
+      padding: 28px 20px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+    }
+
+    .card-icon {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 12px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      line-height: 1.65;
+      color: #374151;
+      margin-bottom: 22px;
+      flex-grow: 1;
+    }
+
+    .card-btn {
+      display: block;
+      width: 100%;
+      padding: 13px 10px;
+      border-radius: 8px;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-align: center;
+      transition: opacity 0.2s ease;
+      letter-spacing: 0.01em;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .card-btn:hover { opacity: 0.84; }
+
+    /* Card colour schemes */
+    .card-peso  { background-color: #d1e2fc; }
+    .card-lmi   { background-color: #d4f0e4; }
+    .card-cdsp  { background-color: #fce8cb; }
+    .card-nsrp  { background-color: #ead5f7; }
+
+    .card-peso  .card-title { color: #2563a8; }
+    .card-lmi   .card-title { color: #117a6f; }
+    .card-cdsp  .card-title { color: #c07a1a; }
+    .card-nsrp  .card-title { color: #6b3fa0; }
+
+    .card-peso  .card-btn { background-color: #2563a8; }
+    .card-lmi   .card-btn { background-color: #117a6f; }
+    .card-cdsp  .card-btn { background-color: #c07a1a; }
+    .card-nsrp  .card-btn { background-color: #6b3fa0; }
+
+    /* ═══ FEATURES SECTION ═════════════════════════════════ */
+    .features-section {
+      background: #f3f4f6;
+      border-top: 1px solid #e5e7eb;
+      padding: 60px 24px 80px;
+    }
+
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 48px;
+      align-items: flex-start;
+    }
+
+    .feature-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .feature-icon-wrapper {
+      width: 64px;
+      height: 64px;
+      background: transparent;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
+
+    .feature-icon {
+      width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .feature-item strong {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
+    .feature-item p {
+      font-size: 13.5px;
+      color: #6b7280;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ═══ FOOTER ════════════════════════════════════════════ */
+    .footer {
+      background: #1f2937;
+      border-top: 1px solid #e5e7eb;
+      padding: 24px 32px;
+      text-align: center;
+      font-size: 12.5px;
+      color: #d1d5db;
+    }
+
+    /* ═══ RESPONSIVE ════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); gap: 36px; }
+    }
+
+    @media (max-width: 768px) {
+      .topbar { padding: 0 20px; }
+      .topbar-wordmark { font-size: 17px; }
+      .topbar-nav { display: none; }
+      .nav-link { padding: 7px 10px; font-size: 13px; }
+      .user-details { display: none; }
+      
+      .hero-content { padding: 36px 20px 32px; }
+      .hero-title { font-size: 1.8rem; }
+      
+      .cards-section { padding: 36px 16px 48px; }
+      .cards-grid { grid-template-columns: 1fr; gap: 18px; }
+      .card-icon { width: 130px; height: 130px; }
+      .card { padding: 24px 18px; }
+      
+      .features-section { padding: 48px 16px 60px; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    }
+
+    @media (max-width: 480px) {
+      .topbar { height: 56px; padding: 0 12px; }
+      .topbar-wordmark { font-size: 15px; }
+      .topbar-right { gap: 8px; }
+      .btn-logout { padding: 6px 12px; font-size: 12px; }
+      
+      .hero { min-height: 300px; }
+      .hero-content { padding: 28px 16px 24px; }
+      .hero-title { font-size: 1.4rem; margin-bottom: 14px; }
+      .hero-sub { font-size: 0.85rem; }
+      
+      .cards-grid { gap: 14px; }
+      .card { padding: 20px 14px; }
+      .card-icon { width: 110px; height: 110px; margin-bottom: 14px; }
+      .card-title { font-size: 14px; }
+      .card-desc { font-size: 12px; margin-bottom: 16px; }
+      .card-btn { font-size: 12px; padding: 10px 8px; }
+      
+      .features-grid { grid-template-columns: 1fr; gap: 24px; }
+      .feature-icon-wrapper { width: 52px; height: 52px; margin-bottom: 16px; }
+      .feature-item strong { font-size: 14px; }
+      .feature-item p { font-size: 12.5px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Topbar ─────────────────────────────────────────── -->
+  <header class="topbar">
+    <a href="/" class="topbar-brand">
+      <div class="topbar-logo">
+        <img
+          src="/images/LOGO- IESIS.png"
+          alt="IESIS Logo"
+          onerror="this.style.display='none'"
+        >
+      </div>
+      <span class="topbar-wordmark">IESIS</span>
+    </a>
+
+    <nav class="topbar-nav" aria-label="Main navigation">
+      <button class="nav-link active">Home</button>
+      <a href="#" class="nav-link">About the System</a>
+      <a href="#" class="nav-link">Resources</a>
+    </nav>
+
+    <div class="topbar-right">
+      <div class="user-info">
+        <div class="user-avatar" id="userAvatar">A</div>
+        <div class="user-details">
+          <strong id="userName">User</strong>
+          <small id="userRole">Staff</small>
+        </div>
+      </div>
+      <button class="btn-logout" id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+  <!-- ── Hero ──────────────────────────────────────────── -->
+  <section class="hero" aria-label="IESIS hero banner">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        One System. Integrated Data.<br>
+        Stronger Employment and Skills for All.
+      </h1>
+      <p class="hero-sub">
+        An integrated platform that connects services, information, and opportunities to
+        support your career and skills development journey.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Service cards ────────────────────────────────── -->
+  <section class="cards-section" aria-label="IESIS Services">
+    <div class="cards-grid">
+
+      <!-- Card 1: PESO -->
+      <a href="/peso-services.html" class="card card-peso">
+        <img
+          class="card-icon"
+          src="/images/peso-icon.png"
+          alt="Public Employment Service Office"
+          onerror="this.textContent='🏢'"
+        >
+        <h2 class="card-title">
+          Public Employment<br>Service Office (PESO)
+        </h2>
+        <p class="card-desc">
+          Access employment services, job matching consultations, and local
+          employment programs in your area.
+        </p>
+        <button class="card-btn">Go to PESO Services →</button>
+      </a>
+
+      <!-- Card 2: Labor Market Information -->
+      <a href="/labor-market.html" class="card card-lmi">
+        <img
+          class="card-icon"
+          src="/images/lmi-icon.png"
+          alt="Labor Market Information"
+          onerror="this.textContent='📈'"
+        >
+        <h2 class="card-title">
+          Labor Market<br>Information
+        </h2>
+        <p class="card-desc">
+          Explore labor market data, job trends, in-demand skills, and industry
+          insights to make informed decisions.
+        </p>
+        <button class="card-btn">Go to Labor Market →</button>
+      </a>
+
+      <!-- Card 3: CDSP -->
+      <a href="/cdsp-programs.html" class="card card-cdsp">
+        <img
+          class="card-icon"
+          src="/images/cdsp-icon.png"
+          alt="Career Development Support Program"
+          onerror="this.textContent='🎯'"
+        >
+        <h2 class="card-title">
+          Career Development<br>Support Program
+        </h2>
+        <p class="card-desc">
+          Discover programs and resources that support your career growth,
+          capacity building, and employability.
+        </p>
+        <button class="card-btn">Go to CDSP Programs →</button>
+      </a>
+
+      <!-- Card 4: NSRP -->
+      <a href="/nsrp.html" class="card card-nsrp">
+        <img
+          class="card-icon"
+          src="/images/nsrp-icon.png"
+          alt="National Skills Registration Program"
+          onerror="this.textContent='📋'"
+        >
+        <h2 class="card-title">
+          National Skills<br>Registration Program
+        </h2>
+        <p class="card-desc">
+          Register your skills, get assessed, and be part of the National Skills
+          Registry for better opportunities and recognition.
+        </p>
+        <button class="card-btn">Go to NSRP →</button>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── Features Section ──────────────────────────────── -->
+  <section class="features-section" aria-label="IESIS Features">
+    <div class="features-container">
+      <div class="features-grid">
+        
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="#4da6d4" stroke-width="1.5">
+              <path d="M12 1C6.48 1 2 5.48 2 11s4.48 10 10 10 10-4.48 10-10S17.52 1 12 1zm-2 15l-5-5 1.41-1.41L10 13.17l7.59-7.59L19 7l-9 9z"/>
+            </svg>
+          </div>
+          <strong>Secure and Confidential</strong>
+          <p>Your data is protected and well-secured</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="#4da6d4" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <strong>Integrated & Connected</strong>
+          <p>One platform for multiple services and information</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="#4da6d4" stroke-width="1.5">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+            </svg>
+          </div>
+          <strong>Empowering Opportunities</strong>
+          <p>Better information. Better skills. Better opportunities for all.</p>
+        </div>
+
+        <div class="feature-item">
+          <div class="feature-icon-wrapper">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="#4da6d4" stroke-width="1.5">
+              <path d="M12 1C6.48 1 2 5.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 1 12 1zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3-8.5c0 .83-.67 1.5-1.5 1.5S12 11.33 12 10.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm-6 0c0 .83-.67 1.5-1.5 1.5S4 11.33 4 10.5 4.67 9 6 9s1.5.67 1.5 1.5z"/>
+            </svg>
+          </div>
+          <strong>Need help?</strong>
+          <p>Visit our Help Center or contact support</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ────────────────────────────────────────── -->
+  <footer class="footer">
+    © IESIS Services Portal — Integrated Employment and Skills Information System
+  </footer>
+
+  <script>
+    // Load user data
+    async function loadUserData() {
+      try {
+        const response = await fetch('/api/user');
+        if (response.ok) {
+          const user = await response.json();
+          document.getElementById('userName').textContent = user.full_name || user.username;
+          document.getElementById('userRole').textContent = user.role || 'User';
+          document.getElementById('userAvatar').textContent = (user.username || 'U')[0].toUpperCase();
+        } else {
+          window.location.href = '/login';
+        }
+      } catch (error) {
+        console.error('Error loading user data:', error);
+        window.location.href = '/login';
+      }
+    }
+
+    // Handle logout
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        await fetch('/api/logout', { method: 'POST' });
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    });
+
+    // Load user data on page load
+    loadUserData();
+  </script>
+
+</body>
+</html>
